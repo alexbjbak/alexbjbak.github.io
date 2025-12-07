@@ -37,14 +37,8 @@ header {
     padding: 40px 20px;
     text-align: center;
 }
-h1 {
-    font-size: 2.4rem;
-    margin-bottom: 0.2rem;
-}
-.subtitle {
-    color: var(--subtitle-color);
-    font-size: 1rem;
-}
+h1 { font-size: 2.4rem; margin-bottom: 0.2rem; }
+.subtitle { color: var(--subtitle-color); font-size: 1rem; }
 .container {
     max-width: 900px;
     margin: 0 auto;
@@ -83,47 +77,21 @@ h1 {
     box-shadow: 0 4px 20px var(--card-shadow);
     margin-bottom: 20px;
 }
-.section h2 {
-    font-size: 1.3rem;
-    margin-bottom: 15px;
-}
-.section h4 {
-    margin: 12px 0 5px;
-}
+.section h2 { font-size: 1.3rem; margin-bottom: 15px; }
+.section h4 { margin: 12px 0 5px; }
 @media (max-width: 780px) {
-    .container {
-        grid-template-columns: 1fr;
-    }
+    .container { grid-template-columns: 1fr; }
 }
-#pub-list p {
-    margin: 10px 0;
-    line-height: 1.4;
-    font-size: 0.95rem;
-}
-#pub-controls {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    margin-bottom: 12px;
-}
+#pub-list p { margin: 10px 0; line-height: 1.4; font-size: 0.95rem; }
+#pub-controls { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
 #refresh-btn {
-    padding: 6px 10px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    background: var(--card-bg);
-    cursor: pointer;
-    color: var(--text-color);
+    padding: 6px 10px; border-radius: 8px; border: 1px solid #ddd;
+    background: var(--card-bg); cursor: pointer; color: var(--text-color);
 }
-#last-updated {
-    color: var(--subtitle-color);
-    font-size: 0.9rem;
-}
-a {
-    color: var(--link-color);
-}
+#last-updated { color: var(--subtitle-color); font-size: 0.9rem; }
+a { color: var(--link-color); }
 .news-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 15px;
 }
 .news-card {
@@ -135,24 +103,27 @@ a {
     flex-direction: column;
     transition: transform 0.2s;
 }
-.news-card:hover {
-    transform: scale(1.02);
+.news-card:hover { transform: scale(1.02); }
+.news-card img { width: 100%; height: 120px; object-fit: cover; }
+.news-card a { padding: 10px; text-decoration: none; color: var(--text-color); font-size: 0.95rem; flex: 1; }
+.stats-grid {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 10px;
 }
-.news-card img {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-}
-.news-card a {
-    padding: 10px;
-    text-decoration: none;
-    color: var(--text-color);
-    font-size: 0.95rem;
+.stat-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px var(--card-shadow);
+    padding: 20px;
+    text-align: center;
+    min-width: 120px;
     flex: 1;
 }
-.news-section {
-    margin-top: 20px;
-}
+.stat-number { font-size: 2.2rem; font-weight: bold; color: var(--text-color); margin-bottom: 5px; }
+.stat-label { color: var(--subtitle-color); font-size: 0.95rem; }
+@media (max-width: 780px) { .stats-grid { flex-direction: column; gap: 15px; } }
 </style>
 </head>
 <body>
@@ -162,16 +133,31 @@ a {
 </header>
 <div class="container">
 <aside>
-    <div class="profile-card" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
-        <img src="images/headshot1.jpeg" alt="Alex B Bak headshot" itemprop="contentUrl">
-        <div class="social" itemprop="sameAs">
+    <div class="profile-card">
+        <img src="images/headshot1.jpeg" alt="Alex B Bak headshot" itemprop="image">
+        <div class="social">
             <a href="https://scholar.google.com/citations?user=TnT6AcUAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
             <a href="https://www.linkedin.com/in/alexbbak/" target="_blank" rel="noopener">LinkedIn</a>
         </div>
         <section class="section news-section" id="news">
             <h2>News</h2>
-            <div class="news-grid" id="news-list">
-                <!-- News articles will be inserted here -->
+            <div class="news-grid" id="news-list"></div>
+        </section>
+        <section class="section stats-section">
+            <h2>Adventure Stats</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="countries-counter">0</div>
+                    <div class="stat-label">Countries Travelled 🌍</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="ski-counter">0</div>
+                    <div class="stat-label">Ski Areas 🎿</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="dives-counter">0</div>
+                    <div class="stat-label">Dives 🤿</div>
+                </div>
             </div>
         </section>
     </div>
@@ -204,7 +190,21 @@ a {
 </section>
 </main>
 </div>
+
 <script>
+// Counters
+function animateCounter(id, target) {
+    const el = document.getElementById(id);
+    let count = 0;
+    const step = Math.ceil(target / 50);
+    const interval = setInterval(() => {
+        count += step;
+        if (count >= target) { count = target; clearInterval(interval); }
+        el.textContent = count;
+    }, 20);
+}
+
+// Publications
 async function loadPublications(forceRefresh=false){
     const cacheKey="pub_cache_html";
     const cacheTimeKey="pub_cache_time";
@@ -257,27 +257,26 @@ async function loadPublications(forceRefresh=false){
         document.getElementById("last-updated-time").innerText=new Date().toLocaleString();
     }catch(err){console.error('Error loading publications:',err);document.getElementById("pub-list").innerText="Error loading publications.";}
 }
-function escapeHtml(str){if(!str)return'';return String(str).replace(/[&<>"'`]/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;",'`':'&#96;'})[s]);}
-document.addEventListener('DOMContentLoaded',()=>{
-    document.getElementById('refresh-btn').addEventListener('click',()=>{loadPublications(true);});
-    loadPublications();
-    loadNews();
-});
+function escapeHtml(str){if(!str)return'';return String(str).replace(/[&<>\"'`]/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":\"&#39;\",'`':'&#96;'})[s]);}
+
+// News
 async function getThumbnailFromURL(url){
+    const apiKey='YOUR_GOOGLE_API_KEY';
+    const cx='YOUR_CUSTOM_SEARCH_ENGINE_ID';
+    const searchUrl=`https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(url)}&cx=${cx}&searchType=image&num=1&key=${apiKey}`;
     try{
-        // Using LinkPreview API free tier to extract image
-        const proxyUrl='https://api.linkpreview.net/?key=1d98c586a5e4d6e7f11acdc2fcffdf77'+encodeURIComponent(url);
-        const res=await fetch(proxyUrl);
+        const res=await fetch(searchUrl);
         const data=await res.json();
-        if(data.image) return data.image;
-    }catch(err){console.error('Error fetching thumbnail:',err);}
+        if(data.items && data.items.length){ return data.items[0].link; }
+    }catch(err){ console.error('Error fetching thumbnail:',err); }
     return 'https://via.placeholder.com/200x120?text=No+Image';
 }
+
 async function loadNews(){
     const newsList=document.getElementById('news-list');
     newsList.innerHTML='<p>Loading news...</p>';
     const newsData=[
-        {title:'Anesthesiology resident receives two awards at international meeting',url:'https://anesthesia.utoronto.ca/news/anesthesia-resident-receives-two-awards-society-neuroscience-anesthesiology-and-critical-care'},
+        {title:'Anesthesia Resident Receives Two Awards at International Meeting',url:'https://anesthesia.utoronto.ca/news/anesthesia-resident-receives-two-awards-society-neuroscience-anesthesiology-and-critical-care'},
         {title:'Researchers find that race matters in recovery after cancer surgery',url:'https://www.uhnresearch.ca/news/race-matters-recovery'},
         {title:'Toronto entrepreuners win medtech pitch competition',url:'https://www.ideation.clinic/news/challenge-winner-specifix'}
     ];
@@ -290,7 +289,15 @@ async function loadNews(){
         newsList.appendChild(card);
     }
 }
+
+document.addEventListener('DOMContentLoaded',()=>{
+    document.getElementById('refresh-btn').addEventListener('click',()=>{loadPublications(true);});
+    loadPublications();
+    loadNews();
+    animateCounter('countries-counter', 18);
+    animateCounter('ski-counter', 25);
+    animateCounter('dives-counter', 12);
+});
 </script>
 </body>
 </html>
-
