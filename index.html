@@ -269,7 +269,7 @@ async function getThumbnailFromURL(url){
         const res=await fetch(proxy);
         const data=await res.json();
         const html=data.contents;
-        const ogImageMatch=html.match(/<meta property=["']og:image["'] content=["'](.*?)["']/i);
+        const ogImageMatch=html.match(/<meta property=["']og:image["'] content=["'](.*?\.jpg)["']/i);
         if(ogImageMatch && ogImageMatch[1]) return ogImageMatch[1];
     }catch(err){console.error('Error fetching thumbnail:',err);}
     return 'https://via.placeholder.com/200x120?text=No+Image';
@@ -284,7 +284,7 @@ async function loadNews(){
     ];
     newsList.innerHTML='';
     for(const news of newsData){
-        const thumbnail=news.thumbnail || await getThumbnailFromURL(news.url);
+        const thumbnail=await getThumbnailFromURL(news.url);
         const card=document.createElement('div');
         card.className='news-card';
         card.innerHTML=`<a href="${news.url}" target="_blank" rel="noopener"><img src="${thumbnail}" alt="${escapeHtml(news.title)}"><div>${escapeHtml(news.title)}</div></a>`;
