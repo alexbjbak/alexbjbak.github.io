@@ -91,7 +91,7 @@ h1 { font-size: 2.4rem; margin-bottom: 0.2rem; }
 #last-updated { color: var(--subtitle-color); font-size: 0.9rem; }
 a { color: var(--link-color); }
 .news-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 15px;
 }
 .news-card {
@@ -110,7 +110,7 @@ a { color: var(--link-color); }
 /* Adventure Stats */
 .stats-grid {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     justify-content: center;
     margin-top: 10px;
 }
@@ -118,13 +118,13 @@ a { color: var(--link-color); }
     background: var(--card-bg);
     border-radius: 12px;
     box-shadow: 0 4px 20px var(--card-shadow);
-    padding: 12px;
+    padding: 8px;
     text-align: center;
     flex: 1;
-    min-width: 90px;
+    min-width: 70px;
 }
-.stat-label { color: var(--subtitle-color); font-size: 0.85rem; margin-bottom: 5px; }
-.stat-number { font-size: 1.5rem; font-weight: bold; color: var(--text-color); }
+.stat-label { color: var(--subtitle-color); font-size: 0.75rem; margin-bottom: 4px; }
+.stat-number { font-size: 1.2rem; font-weight: bold; color: var(--text-color); }
 
 @media (max-width: 780px) { 
     .stats-grid { flex-direction: column; gap: 10px; } 
@@ -156,7 +156,7 @@ a { color: var(--link-color); }
             <h2>Adventure Stats</h2>
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-label">Countries Travelled 🌍</div>
+                    <div class="stat-label">Countries 🌍</div>
                     <div class="stat-number" id="countries-counter">0</div>
                 </div>
                 <div class="stat-card">
@@ -268,17 +268,17 @@ async function loadPublications(forceRefresh=false){
 }
 function escapeHtml(str){if(!str)return'';return String(str).replace(/[&<>\"'`]/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":"&#39;",'`':'&#96;'})[s]);}
 
-// News with Google API
-async function getThumbnailFromURL(url){
-    const apiKey='AIzaSyDzPKuR8IC6z73f0EikQ1gA9Lh-MjoZ5aQ';
-    const cx='YOUR_CUSTOM_SEARCH_ENGINE_ID'; // replace with your CSE ID
-    const searchUrl=`https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(url)}&cx=${cx}&searchType=image&num=1&key=${apiKey}`;
+// News with auto img extraction
+async function getThumbnail(url){
     try{
-        const res=await fetch(searchUrl);
+        const res=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(url));
         const data=await res.json();
-        if(data.items && data.items.length){ return data.items[0].link; }
-    }catch(err){ console.error('Error fetching thumbnail:',err); }
-    return 'https://via.placeholder.com/200x120?text=No+Image';
+        const parser=new DOMParser();
+        const doc=parser.parseFromString(data.contents,'text/html');
+        const img=doc.querySelector('img');
+        if(img && img.src) return img.src.startsWith('http')?img.src:(new URL(img.src,url)).href;
+    }catch(err){console.warn('Error fetching image:',err);}
+    return 'https://via.placeholder.com/180x120?text=No+Image';
 }
 
 async function loadNews(){
@@ -291,7 +291,7 @@ async function loadNews(){
     ];
     newsList.innerHTML='';
     for(const news of newsData){
-        const thumbnail=await getThumbnailFromURL(news.url);
+        const thumbnail=await getThumbnail(news.url);
         const card=document.createElement('div');
         card.className='news-card';
         card.innerHTML=`<a href="${news.url}" target="_blank" rel="noopener"><img src="${thumbnail}" alt="${escapeHtml(news.title)}"><div>${escapeHtml(news.title)}</div></a>`;
