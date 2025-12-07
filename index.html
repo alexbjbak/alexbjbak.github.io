@@ -106,9 +106,11 @@ a { color: var(--link-color); }
 .news-card:hover { transform: scale(1.02); }
 .news-card img { width: 100%; height: 120px; object-fit: cover; }
 .news-card a { padding: 10px; text-decoration: none; color: var(--text-color); font-size: 0.95rem; flex: 1; }
+
+/* Adventure Stats */
 .stats-grid {
     display: flex;
-    gap: 20px;
+    gap: 10px;
     justify-content: center;
     margin-top: 10px;
 }
@@ -116,14 +118,17 @@ a { color: var(--link-color); }
     background: var(--card-bg);
     border-radius: 12px;
     box-shadow: 0 4px 20px var(--card-shadow);
-    padding: 20px;
+    padding: 12px;
     text-align: center;
-    min-width: 120px;
     flex: 1;
+    min-width: 90px;
 }
-.stat-number { font-size: 2.2rem; font-weight: bold; color: var(--text-color); margin-bottom: 5px; }
-.stat-label { color: var(--subtitle-color); font-size: 0.95rem; }
-@media (max-width: 780px) { .stats-grid { flex-direction: column; gap: 15px; } }
+.stat-label { color: var(--subtitle-color); font-size: 0.85rem; margin-bottom: 5px; }
+.stat-number { font-size: 1.5rem; font-weight: bold; color: var(--text-color); }
+
+@media (max-width: 780px) { 
+    .stats-grid { flex-direction: column; gap: 10px; } 
+}
 </style>
 </head>
 <body>
@@ -139,24 +144,28 @@ a { color: var(--link-color); }
             <a href="https://scholar.google.com/citations?user=TnT6AcUAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
             <a href="https://www.linkedin.com/in/alexbbak/" target="_blank" rel="noopener">LinkedIn</a>
         </div>
+
+        <!-- News Section -->
         <section class="section news-section" id="news">
             <h2>News</h2>
             <div class="news-grid" id="news-list"></div>
         </section>
+
+        <!-- Adventure Stats -->
         <section class="section stats-section">
             <h2>Adventure Stats</h2>
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-number" id="countries-counter">0</div>
                     <div class="stat-label">Countries Travelled 🌍</div>
+                    <div class="stat-number" id="countries-counter">0</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="ski-counter">0</div>
                     <div class="stat-label">Ski Areas 🎿</div>
+                    <div class="stat-number" id="ski-counter">0</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="dives-counter">0</div>
                     <div class="stat-label">Dives 🤿</div>
+                    <div class="stat-number" id="dives-counter">0</div>
                 </div>
             </div>
         </section>
@@ -192,16 +201,16 @@ a { color: var(--link-color); }
 </div>
 
 <script>
-// Counters
-function animateCounter(id, target) {
-    const el = document.getElementById(id);
-    let count = 0;
-    const step = Math.ceil(target / 50);
-    const interval = setInterval(() => {
-        count += step;
-        if (count >= target) { count = target; clearInterval(interval); }
-        el.textContent = count;
-    }, 20);
+// Animate Counters
+function animateCounter(id, target){
+    const el=document.getElementById(id);
+    let count=0;
+    const step=Math.ceil(target/50);
+    const interval=setInterval(()=>{
+        count+=step;
+        if(count>=target){count=target; clearInterval(interval);}
+        el.textContent=count;
+    },20);
 }
 
 // Publications
@@ -257,12 +266,12 @@ async function loadPublications(forceRefresh=false){
         document.getElementById("last-updated-time").innerText=new Date().toLocaleString();
     }catch(err){console.error('Error loading publications:',err);document.getElementById("pub-list").innerText="Error loading publications.";}
 }
-function escapeHtml(str){if(!str)return'';return String(str).replace(/[&<>\"'`]/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":\"&#39;\",'`':'&#96;'})[s]);}
+function escapeHtml(str){if(!str)return'';return String(str).replace(/[&<>\"'`]/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":"&#39;",'`':'&#96;'})[s]);}
 
-// News
+// News with Google API
 async function getThumbnailFromURL(url){
-    const apiKey='YOUR_GOOGLE_API_KEY';
-    const cx='YOUR_CUSTOM_SEARCH_ENGINE_ID';
+    const apiKey='AIzaSyDzPKuR8IC6z73f0EikQ1gA9Lh-MjoZ5aQ';
+    const cx='YOUR_CUSTOM_SEARCH_ENGINE_ID'; // replace with your CSE ID
     const searchUrl=`https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(url)}&cx=${cx}&searchType=image&num=1&key=${apiKey}`;
     try{
         const res=await fetch(searchUrl);
