@@ -265,12 +265,13 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 async function getThumbnailFromURL(url){
     try{
-        const proxy='https://api.allorigins.win/get?url='+encodeURIComponent(url);
-        const res=await fetch(proxy);
+        // Using the free Microlink API to extract thumbnail
+        const apiUrl=`https://api.microlink.io/?url=${encodeURIComponent(url)}&screenshot=false&meta=true`;
+        const res=await fetch(apiUrl);
         const data=await res.json();
-        const html=data.contents;
-        const ogImageMatch=html.match(/<meta property=["']og:image["'] content=["'](.*?\.jpg)["']/i);
-        if(ogImageMatch && ogImageMatch[1]) return ogImageMatch[1];
+        if(data.status==='success' && data.data && data.data.image && data.data.image.url){
+            return data.data.image.url;
+        }
     }catch(err){console.error('Error fetching thumbnail:',err);}
     return 'https://via.placeholder.com/200x120?text=No+Image';
 }
