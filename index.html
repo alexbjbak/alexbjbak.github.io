@@ -269,9 +269,9 @@ async function loadNews(){
     newsList.innerHTML='<p>Loading news...</p>';
     try{
         const newsData=[
-            {title:'Alex Bak publishes new study on perioperative outcomes',url:'https://example.com/news1',thumbnail:'https://example.com/images/news1.jpg'},
-            {title:'Interview with Alex Bak on anesthesiology research',url:'https://example.com/news2',thumbnail:'https://example.com/images/news2.jpg'},
-            {title:'University of Toronto highlights Alex Bak\'s research',url:'https://example.com/news3',thumbnail:'https://example.com/images/news3.jpg'}
+            {title:'Anesthesia Resident Receives Two Awards at International Meeting',url:'https://anesthesia.utoronto.ca/news/anesthesia-resident-receives-two-awards-society-neuroscience-anesthesiology-and-critical-care',thumbnail:'https://example.com/images/news1.jpg'},
+            {title:'Researchers find that race matters in recovery after cancer surgery',url:'https://www.uhnresearch.ca/news/race-matters-recovery',thumbnail:'https://example.com/images/news2.jpg'},
+            {title:'Toronto entrepreuners win medtech pitch competition',url:'https://www.ideation.clinic/news/challenge-winner-specifix',thumbnail:'https://example.com/images/news3.jpg'}
         ];
         newsList.innerHTML='';
         for(const news of newsData){
@@ -285,3 +285,4 @@ async function loadNews(){
 </script>
 </body>
 </html>
+
