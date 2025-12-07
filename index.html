@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 async function getThumbnailFromURL(url){
     try{
         // Using LinkPreview API free tier to extract image
-        const proxyUrl='https://api.linkpreview.net/?key=4a93587b330f26360925b8c53ad35202'+encodeURIComponent(url);
+        const proxyUrl='https://api.linkpreview.net/?key=1d98c586a5e4d6e7f11acdc2fcffdf77'+encodeURIComponent(url);
         const res=await fetch(proxyUrl);
         const data=await res.json();
         if(data.image) return data.image;
@@ -293,3 +293,4 @@ async function loadNews(){
 </script>
 </body>
 </html>
+
