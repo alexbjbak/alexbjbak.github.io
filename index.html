@@ -67,6 +67,8 @@ h1 {
 }
 .profile-card img {
     width: 100%;
+    height: 300px;
+    object-fit: cover;
     border-radius: 10px;
 }
 .social a {
@@ -165,7 +167,6 @@ a {
         <img src="images/headshot1.jpeg" alt="Alex B Bak headshot" itemprop="contentUrl">
         <div class="social" itemprop="sameAs">
             <a href="https://scholar.google.com/citations?user=TnT6AcUAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
-            <a href="https://x.com/AlexBak_" target="_blank" rel="noopener">Twitter</a>
             <a href="https://www.linkedin.com/in/alexbbak/" target="_blank" rel="noopener">LinkedIn</a>
         </div>
         <section class="section news-section" id="news">
@@ -268,9 +269,9 @@ async function loadNews(){
     newsList.innerHTML='<p>Loading news...</p>';
     try{
         const newsData=[
-            {title:'Alex Bak publishes new study on perioperative outcomes',url:'#',thumbnail:'images/news1.jpg'},
-            {title:'Interview with Alex Bak on anesthesiology research',url:'#',thumbnail:'images/news2.jpg'},
-            {title:'University of Toronto highlights Alex Bak's research',url:'#',thumbnail:'images/news3.jpg'}
+            {title:'Alex Bak publishes new study on perioperative outcomes',url:'https://example.com/news1',thumbnail:'https://example.com/images/news1.jpg'},
+            {title:'Interview with Alex Bak on anesthesiology research',url:'https://example.com/news2',thumbnail:'https://example.com/images/news2.jpg'},
+            {title:'University of Toronto highlights Alex Bak\'s research',url:'https://example.com/news3',thumbnail:'https://example.com/images/news3.jpg'}
         ];
         newsList.innerHTML='';
         for(const news of newsData){
