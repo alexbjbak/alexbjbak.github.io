@@ -7,7 +7,6 @@
 <meta itemprop="jobTitle" content="Anesthesiology Resident">
 <meta itemprop="affiliation" content="University of Toronto">
 <meta itemprop="description" content="Alex Bak is an anesthesiology resident at the University of Toronto with interests in perioperative outcomes and biomedical engineering.">
-
 <style>
 :root {
     --bg-color: #fafafa;
@@ -264,25 +263,34 @@ document.addEventListener('DOMContentLoaded',()=>{
     loadPublications();
     loadNews();
 });
-async function loadNews(){
-    const newsList = document.getElementById('news-list');
-    newsList.innerHTML='<p>Loading news...</p>';
+async function getThumbnailFromURL(url){
     try{
-        const newsData=[
-            {title:'Anesthesia Resident Receives Two Awards at International Meeting',url:'https://anesthesia.utoronto.ca/news/anesthesia-resident-receives-two-awards-society-neuroscience-anesthesiology-and-critical-care',thumbnail:'https://example.com/images/news1.jpg'},
-            {title:'Researchers find that race matters in recovery after cancer surgery',url:'https://www.uhnresearch.ca/news/race-matters-recovery',thumbnail:'https://example.com/images/news2.jpg'},
-            {title:'Toronto entrepreuners win medtech pitch competition',url:'https://www.ideation.clinic/news/challenge-winner-specifix',thumbnail:'https://example.com/images/news3.jpg'}
-        ];
-        newsList.innerHTML='';
-        for(const news of newsData){
-            const card=document.createElement('div');
-            card.className='news-card';
-            card.innerHTML=`<a href="${news.url}" target="_blank" rel="noopener"><img src="${news.thumbnail}" alt="${escapeHtml(news.title)}"><div>${escapeHtml(news.title)}</div></a>`;
-            newsList.appendChild(card);
-        }
-    }catch(err){console.error('Error loading news:',err);newsList.innerHTML='<p>Error loading news.</p>';}
+        const proxy='https://api.allorigins.win/get?url='+encodeURIComponent(url);
+        const res=await fetch(proxy);
+        const data=await res.json();
+        const html=data.contents;
+        const ogImageMatch=html.match(/<meta property=["']og:image["'] content=["'](.*?)["']/i);
+        if(ogImageMatch && ogImageMatch[1]) return ogImageMatch[1];
+    }catch(err){console.error('Error fetching thumbnail:',err);}
+    return 'https://via.placeholder.com/200x120?text=No+Image';
+}
+async function loadNews(){
+    const newsList=document.getElementById('news-list');
+    newsList.innerHTML='<p>Loading news...</p>';
+    const newsData=[
+        {title:'Anesthesia Resident Receives Two Awards at International Meeting',url:'https://anesthesia.utoronto.ca/news/anesthesia-resident-receives-two-awards-society-neuroscience-anesthesiology-and-critical-care'},
+        {title:'Researchers find that race matters in recovery after cancer surgery',url:'https://www.uhnresearch.ca/news/race-matters-recovery'},
+        {title:'Toronto entrepreuners win medtech pitch competition',url:'https://www.ideation.clinic/news/challenge-winner-specifix'}
+    ];
+    newsList.innerHTML='';
+    for(const news of newsData){
+        const thumbnail=news.thumbnail || await getThumbnailFromURL(news.url);
+        const card=document.createElement('div');
+        card.className='news-card';
+        card.innerHTML=`<a href="${news.url}" target="_blank" rel="noopener"><img src="${thumbnail}" alt="${escapeHtml(news.title)}"><div>${escapeHtml(news.title)}</div></a>`;
+        newsList.appendChild(card);
+    }
 }
 </script>
 </body>
 </html>
-
