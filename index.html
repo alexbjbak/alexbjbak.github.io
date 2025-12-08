@@ -81,6 +81,11 @@ h1 { font-size: 2.4rem; margin-bottom: 0.2rem; }
 .section h4 { margin: 12px 0 5px; }
 @media (max-width: 780px) {
     .container { grid-template-columns: 1fr; }
+
+    /* Move news and stats to the end */
+    .news-section, .stats-section {
+        order: 1;
+    }
 }
 #pub-list p { margin: 10px 0; line-height: 1.4; font-size: 0.95rem; }
 #pub-controls { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
@@ -129,10 +134,13 @@ a { color: var(--link-color); text-decoration: none; }
   gap: 12px;
 }
 
+.news-card { display: flex; flex-direction: column; align-items: center; }
+
 .news-card p { 
   font-size: 0.9rem; 
   color: var(--text-color); 
-  margin: 0; 
+  margin: 8px 0 0;
+  text-align: center; /* center the text */
 }
 
 /* === GRAYSCALE + HOVER TO COLOR === */
@@ -167,7 +175,7 @@ a { color: var(--link-color); text-decoration: none; }
 
         <!-- News Section -->
         <section class="section news-section" id="news">
-          <h2>News</h2>
+          <h2>In the News</h2>
           <div id="news-grid"></div>
         </section>
 
