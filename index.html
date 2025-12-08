@@ -7,6 +7,7 @@
 <meta itemprop="jobTitle" content="Anesthesiology Resident">
 <meta itemprop="affiliation" content="University of Toronto">
 <meta itemprop="description" content="Alex Bak is an anesthesiology resident at the University of Toronto with interests in perioperative outcomes and biomedical engineering.">
+
 <style>
 :root {
     --bg-color: #fafafa;
@@ -53,7 +54,6 @@ h1 { font-size: 2.4rem; margin-bottom: 0.2rem; }
     border-radius: 14px;
     box-shadow: 0 4px 20px var(--card-shadow);
     text-align: center;
-    height: fit-content;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -110,7 +110,7 @@ a { color: var(--link-color); }
 /* Adventure Stats */
 .stats-grid {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     justify-content: center;
     margin-top: 10px;
 }
@@ -118,13 +118,13 @@ a { color: var(--link-color); }
     background: var(--card-bg);
     border-radius: 12px;
     box-shadow: 0 4px 20px var(--card-shadow);
-    padding: 8px;
+    padding: 6px;
     text-align: center;
     flex: 1;
-    min-width: 70px;
+    min-width: 60px;
 }
-.stat-label { color: var(--subtitle-color); font-size: 0.75rem; margin-bottom: 4px; }
-.stat-number { font-size: 1.2rem; font-weight: bold; color: var(--text-color); }
+.stat-label { color: var(--subtitle-color); font-size: 0.7rem; margin-bottom: 3px; }
+.stat-number { font-size: 1rem; font-weight: bold; color: var(--text-color); }
 
 @media (max-width: 780px) { 
     .stats-grid { flex-direction: column; gap: 10px; } 
@@ -171,6 +171,7 @@ a { color: var(--link-color); }
         </section>
     </div>
 </aside>
+
 <main>
 <section class="section" itemprop="description">
     <h2>Bio</h2>
@@ -178,6 +179,7 @@ a { color: var(--link-color); }
     <p>Alex has published in several peer-reviewed journals and has been funded by the Institute of Medical Science and the University of Toronto Faculty of Medicine.</p>
     <p>His current interests focus on improving perioperative outcomes.</p>
 </section>
+
 <section class="section">
     <h2>Education</h2>
     <h4>University of Toronto</h4>
@@ -185,10 +187,12 @@ a { color: var(--link-color); }
     <h4>McMaster University</h4>
     <p>BHSc (Honours) in Health Sciences — 2020</p>
 </section>
+
 <section class="section">
     <h2>Experience</h2>
     <p><strong>Resident Physician, Anesthesiology</strong><br>University of Toronto (2024–Present)</p>
 </section>
+
 <section class="section" id="publications">
     <h2>Publications</h2>
     <div id="pub-controls">
@@ -213,7 +217,7 @@ function animateCounter(id, target){
     },20);
 }
 
-// Publications
+// Publications (PubMed)
 async function loadPublications(forceRefresh=false){
     const cacheKey="pub_cache_html";
     const cacheTimeKey="pub_cache_time";
@@ -268,33 +272,40 @@ async function loadPublications(forceRefresh=false){
 }
 function escapeHtml(str){if(!str)return'';return String(str).replace(/[&<>\"'`]/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":"&#39;",'`':'&#96;'})[s]);}
 
-// News with auto img extraction
-async function getThumbnail(url){
+// News (PreviewBox)
+async function getPreviewBox(url){
     try{
-        const res=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(url));
-        const data=await res.json();
-        const parser=new DOMParser();
-        const doc=parser.parseFromString(data.contents,'text/html');
-        const img=doc.querySelector('img');
-        if(img && img.src) return img.src.startsWith('http')?img.src:(new URL(img.src,url)).href;
-    }catch(err){console.warn('Error fetching image:',err);}
-    return 'https://via.placeholder.com/180x120?text=No+Image';
+        const res = await fetch(`https://api.previewbox.io/v1/preview?url=${encodeURIComponent(url)}`);
+        if(!res.ok) throw new Error("PreviewBox API error");
+        const data = await res.json();
+        return {
+            title: data.title || url,
+            image: data.image || 'https://via.placeholder.com/180x120?text=No+Image',
+        };
+    } catch(err){
+        console.error('PreviewBox error:', err);
+        return {title: url, image: 'https://via.placeholder.com/180x120?text=No+Image'};
+    }
 }
 
 async function loadNews(){
-    const newsList=document.getElementById('news-list');
-    newsList.innerHTML='<p>Loading news...</p>';
+    const newsList = document.getElementById('news-list');
+    newsList.innerHTML = '';
     const newsData=[
-        {title:'Anesthesia Resident Receives Two Awards at International Meeting',url:'https://anesthesia.utoronto.ca/news/anesthesia-resident-receives-two-awards-society-neuroscience-anesthesiology-and-critical-care'},
-        {title:'Researchers find that race matters in recovery after cancer surgery',url:'https://www.uhnresearch.ca/news/race-matters-recovery'},
-        {title:'Toronto entrepreuners win medtech pitch competition',url:'https://www.ideation.clinic/news/challenge-winner-specifix'}
+        {title:'Anesthesia Resident Receives Two Awards at International Meeting', url:'https://anesthesia.utoronto.ca/news/anesthesia-resident-receives-two-awards-society-neuroscience-anesthesiology-and-critical-care'},
+        {title:'Researchers find that race matters in recovery after cancer surgery', url:'https://www.uhnresearch.ca/news/race-matters-recovery'},
+        {title:'Toronto entrepreneurs win medtech pitch competition', url:'https://www.ideation.clinic/news/challenge-winner-specifix'}
     ];
-    newsList.innerHTML='';
-    for(const news of newsData){
-        const thumbnail=await getThumbnail(news.url);
-        const card=document.createElement('div');
-        card.className='news-card';
-        card.innerHTML=`<a href="${news.url}" target="_blank" rel="noopener"><img src="${thumbnail}" alt="${escapeHtml(news.title)}"><div>${escapeHtml(news.title)}</div></a>`;
+    for(const item of newsData){
+        const preview = await getPreviewBox(item.url);
+        const card = document.createElement('div');
+        card.className = 'news-card';
+        card.innerHTML = `
+            <a href="${item.url}" target="_blank" rel="noopener">
+                <img src="${preview.image}" alt="${preview.title}">
+                <div>${item.title}</div>
+            </a>
+        `;
         newsList.appendChild(card);
     }
 }
