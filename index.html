@@ -107,7 +107,15 @@ a { color: var(--link-color); text-decoration: none; }
     flex: 1;
     min-width: 60px;
 }
-.stat-label { color: var(--subtitle-color); font-size: 0.7rem; margin-bottom: 3px; display: flex; align-items: center; justify-content: center; gap:3px; }
+.stat-label { 
+    color: var(--subtitle-color); 
+    font-size: 0.7rem; 
+    margin-bottom: 3px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap:3px; 
+}
 .stat-number { font-size: 1rem; font-weight: bold; color: var(--text-color); }
 
 @media (max-width: 780px) { 
@@ -222,11 +230,11 @@ const newsArticles = [
   {title:'Toronto entrepreneurs win medtech pitch competition', url:'https://www.ideation.clinic/news/challenge-winner-specifix'}
 ];
 
-const API_KEY = 'YOUR_LINKPREVIEW_API_KEY'; // get from https://www.linkpreview.net/
+const API_KEY = '9a71cb507a453d96a0e0c017e1f7ec00'; // Your LinkPreview API key
 
 async function fetchPreview(url) {
   try {
-    const res = await fetch(`https://api.linkpreview.net/?key=${9a71cb507a453d96a0e0c017e1f7ec00}&q=${encodeURIComponent(url)}`);
+    const res = await fetch(`https://api.linkpreview.net/?key=${API_KEY}&q=${encodeURIComponent(url)}`);
     const data = await res.json();
     return data;
   } catch(e) {
