@@ -8,6 +8,9 @@
 <meta itemprop="affiliation" content="University of Toronto">
 <meta itemprop="description" content="Alex Bak is an anesthesiology resident at the University of Toronto with interests in perioperative outcomes and biomedical engineering.">
 
+<!-- Previewbox script -->
+<script src="https://cdn.jsdelivr.net/npm/@mariusbongarts/previewbox/dist/index.min.js"></script>
+
 <style>
 :root {
     --bg-color: #fafafa;
@@ -89,23 +92,7 @@ h1 { font-size: 2.4rem; margin-bottom: 0.2rem; }
     background: var(--card-bg); cursor: pointer; color: var(--text-color);
 }
 #last-updated { color: var(--subtitle-color); font-size: 0.9rem; }
-a { color: var(--link-color); }
-.news-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 15px;
-}
-.news-card {
-    background: var(--card-bg);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px var(--card-shadow);
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.2s;
-}
-.news-card:hover { transform: scale(1.02); }
-.news-card img { width: 100%; height: 120px; object-fit: cover; }
-.news-card a { padding: 10px; text-decoration: none; color: var(--text-color); font-size: 0.95rem; flex: 1; }
+a { color: var(--link-color); text-decoration: none; }
 
 /* Adventure Stats */
 .stats-grid {
@@ -118,16 +105,24 @@ a { color: var(--link-color); }
     background: var(--card-bg);
     border-radius: 12px;
     box-shadow: 0 4px 20px var(--card-shadow);
-    padding: 6px;
+    padding: 6px 4px;
     text-align: center;
     flex: 1;
     min-width: 60px;
 }
-.stat-label { color: var(--subtitle-color); font-size: 0.7rem; margin-bottom: 3px; }
+.stat-label { color: var(--subtitle-color); font-size: 0.7rem; margin-bottom: 3px; display: flex; align-items: center; justify-content: center; gap:3px; }
 .stat-number { font-size: 1rem; font-weight: bold; color: var(--text-color); }
 
 @media (max-width: 780px) { 
     .stats-grid { flex-direction: column; gap: 10px; } 
+}
+
+/* Previewbox custom size */
+previewbox-link {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    margin-bottom: 12px;
 }
 </style>
 </head>
@@ -148,7 +143,11 @@ a { color: var(--link-color); }
         <!-- News Section -->
         <section class="section news-section" id="news">
             <h2>News</h2>
-            <div class="news-grid" id="news-list"></div>
+            <div class="news-grid">
+                <previewbox-link href="https://anesthesia.utoronto.ca/news/anesthesia-resident-receives-two-awards-society-neuroscience-anesthesiology-and-critical-care"></previewbox-link>
+                <previewbox-link href="https://www.uhnresearch.ca/news/race-matters-recovery"></previewbox-link>
+                <previewbox-link href="https://www.ideation.clinic/news/challenge-winner-specifix"></previewbox-link>
+            </div>
         </section>
 
         <!-- Adventure Stats -->
@@ -156,15 +155,15 @@ a { color: var(--link-color); }
             <h2>Adventure Stats</h2>
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-label">Countries 🌍</div>
+                    <div class="stat-label"><span>🌍</span> Countries</div>
                     <div class="stat-number" id="countries-counter">0</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Ski Areas 🎿</div>
+                    <div class="stat-label"><span>🎿</span> Ski Areas</div>
                     <div class="stat-number" id="ski-counter">0</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Dives 🤿</div>
+                    <div class="stat-label"><span>🤿</span> Dives</div>
                     <div class="stat-number" id="dives-counter">0</div>
                 </div>
             </div>
@@ -272,48 +271,9 @@ async function loadPublications(forceRefresh=false){
 }
 function escapeHtml(str){if(!str)return'';return String(str).replace(/[&<>\"'`]/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":"&#39;",'`':'&#96;'})[s]);}
 
-// News (PreviewBox)
-async function getPreviewBox(url){
-    try{
-        const res = await fetch(`https://api.previewbox.io/v1/preview?url=${encodeURIComponent(url)}`);
-        if(!res.ok) throw new Error("PreviewBox API error");
-        const data = await res.json();
-        return {
-            title: data.title || url,
-            image: data.image || 'https://via.placeholder.com/180x120?text=No+Image',
-        };
-    } catch(err){
-        console.error('PreviewBox error:', err);
-        return {title: url, image: 'https://via.placeholder.com/180x120?text=No+Image'};
-    }
-}
-
-async function loadNews(){
-    const newsList = document.getElementById('news-list');
-    newsList.innerHTML = '';
-    const newsData=[
-        {title:'Anesthesia Resident Receives Two Awards at International Meeting', url:'https://anesthesia.utoronto.ca/news/anesthesia-resident-receives-two-awards-society-neuroscience-anesthesiology-and-critical-care'},
-        {title:'Researchers find that race matters in recovery after cancer surgery', url:'https://www.uhnresearch.ca/news/race-matters-recovery'},
-        {title:'Toronto entrepreneurs win medtech pitch competition', url:'https://www.ideation.clinic/news/challenge-winner-specifix'}
-    ];
-    for(const item of newsData){
-        const preview = await getPreviewBox(item.url);
-        const card = document.createElement('div');
-        card.className = 'news-card';
-        card.innerHTML = `
-            <a href="${item.url}" target="_blank" rel="noopener">
-                <img src="${preview.image}" alt="${preview.title}">
-                <div>${item.title}</div>
-            </a>
-        `;
-        newsList.appendChild(card);
-    }
-}
-
 document.addEventListener('DOMContentLoaded',()=>{
     document.getElementById('refresh-btn').addEventListener('click',()=>{loadPublications(true);});
     loadPublications();
-    loadNews();
     animateCounter('countries-counter', 18);
     animateCounter('ski-counter', 25);
     animateCounter('dives-counter', 12);
