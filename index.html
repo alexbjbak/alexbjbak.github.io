@@ -8,9 +8,6 @@
 <meta itemprop="affiliation" content="University of Toronto">
 <meta itemprop="description" content="Alex Bak is an anesthesiology resident at the University of Toronto with interests in perioperative outcomes and biomedical engineering.">
 
-<!-- Previewbox script -->
-<script src="https://cdn.jsdelivr.net/npm/@mariusbongarts/previewbox/dist/index.min.js"></script>
-
 <style>
 :root {
     --bg-color: #fafafa;
@@ -117,13 +114,14 @@ a { color: var(--link-color); text-decoration: none; }
     .stats-grid { flex-direction: column; gap: 10px; } 
 }
 
-/* Previewbox custom size */
-previewbox-link {
-    width: 100%;
-    max-width: 100%;
-    display: block;
-    margin-bottom: 12px;
+/* News Grid */
+#news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 12px;
 }
+.news-card p { font-size: 0.9rem; color: var(--text-color); margin:0; }
+.news-card img { border-radius:8px; width:100%; height:150px; object-fit:cover; }
 </style>
 </head>
 <body>
@@ -142,12 +140,8 @@ previewbox-link {
 
         <!-- News Section -->
         <section class="section news-section" id="news">
-            <h2>News</h2>
-            <div class="news-grid">
-                <previewbox-link href="https://anesthesia.utoronto.ca/news/anesthesia-resident-receives-two-awards-society-neuroscience-anesthesiology-and-critical-care"></previewbox-link>
-                <previewbox-link href="https://www.uhnresearch.ca/news/race-matters-recovery"></previewbox-link>
-                <previewbox-link href="https://www.ideation.clinic/news/challenge-winner-specifix"></previewbox-link>
-            </div>
+          <h2>News</h2>
+          <div id="news-grid"></div>
         </section>
 
         <!-- Adventure Stats -->
@@ -155,15 +149,15 @@ previewbox-link {
             <h2>Adventure Stats</h2>
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-label"><span>🌍</span> Countries</div>
+                    <div class="stat-label">Countries 🌍</div>
                     <div class="stat-number" id="countries-counter">0</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label"><span>🎿</span> Ski Areas</div>
+                    <div class="stat-label">Ski Areas 🎿</div>
                     <div class="stat-number" id="ski-counter">0</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label"><span>🤿</span> Dives</div>
+                    <div class="stat-label">Dives 🤿</div>
                     <div class="stat-number" id="dives-counter">0</div>
                 </div>
             </div>
@@ -215,6 +209,51 @@ function animateCounter(id, target){
         el.textContent=count;
     },20);
 }
+
+// Adventure counters
+animateCounter('countries-counter', 18);
+animateCounter('ski-counter', 25);
+animateCounter('dives-counter', 12);
+
+// News Articles & Auto Thumbnail
+const newsArticles = [
+  {title:'Anesthesia Resident Receives Two Awards at International Meeting', url:'https://anesthesia.utoronto.ca/news/anesthesia-resident-receives-two-awards-society-neuroscience-anesthesiology-and-critical-care'},
+  {title:'Researchers find that race matters in recovery after cancer surgery', url:'https://www.uhnresearch.ca/news/race-matters-recovery'},
+  {title:'Toronto entrepreneurs win medtech pitch competition', url:'https://www.ideation.clinic/news/challenge-winner-specifix'}
+];
+
+const API_KEY = 'YOUR_LINKPREVIEW_API_KEY'; // get from https://www.linkpreview.net/
+
+async function fetchPreview(url) {
+  try {
+    const res = await fetch(`https://api.linkpreview.net/?key=${9a71cb507a453d96a0e0c017e1f7ec00}&q=${encodeURIComponent(url)}`);
+    const data = await res.json();
+    return data;
+  } catch(e) {
+    console.error('Error fetching preview for', url, e);
+    return null;
+  }
+}
+
+async function renderNews() {
+  const container = document.getElementById('news-grid');
+  for (let article of newsArticles) {
+    const preview = await fetchPreview(article.url);
+    if(preview && preview.image) {
+      const div = document.createElement('div');
+      div.className = 'news-card';
+      div.innerHTML = `
+        <a href="${preview.url}" target="_blank" rel="noopener">
+          <img src="${preview.image}" alt="${preview.title}">
+          <p>${preview.title}</p>
+        </a>
+      `;
+      container.appendChild(div);
+    }
+  }
+}
+
+renderNews();
 
 // Publications (PubMed)
 async function loadPublications(forceRefresh=false){
@@ -274,9 +313,6 @@ function escapeHtml(str){if(!str)return'';return String(str).replace(/[&<>\"'`]/
 document.addEventListener('DOMContentLoaded',()=>{
     document.getElementById('refresh-btn').addEventListener('click',()=>{loadPublications(true);});
     loadPublications();
-    animateCounter('countries-counter', 18);
-    animateCounter('ski-counter', 25);
-    animateCounter('dives-counter', 12);
 });
 </script>
 </body>
