@@ -58,36 +58,83 @@ h1 { font-size: 2.4rem; margin-bottom: 0.2rem; }
     flex-direction: column;
     gap: 20px;
 }
+.profile-card .section {
+    margin-bottom: 0;
+}
 .profile-card img {
     width: 100%;
     height: 300px;
     object-fit: cover;
     border-radius: 10px;
 }
+.social {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+}
 .social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
     color: var(--link-color);
-    margin: 0 8px;
     text-decoration: none;
-    font-weight: 500;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    border-radius: 8px;
+}
+.social a:hover {
+    transform: translateY(-2px);
+    opacity: 0.8;
+}
+.social-icon-svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
 }
 .section {
     background: var(--card-bg);
-    padding: 25px;
+    padding: 15px 25px 25px;
     border-radius: 14px;
     box-shadow: 0 4px 20px var(--card-shadow);
     margin-bottom: 20px;
 }
-.section h2 { font-size: 1.3rem; margin-bottom: 15px; }
+.section h2 { font-size: 1.3rem; margin-top: 0; margin-bottom: 15px; }
 .section h4 { margin: 12px 0 5px; }
 @media (max-width: 780px) {
     .container { grid-template-columns: 1fr; }
 
-    /* Move news and stats to the end */
-    .news-section, .stats-section {
+    /* Move news to the end */
+    .news-section {
         order: 1;
     }
 }
-#pub-list p { margin: 10px 0; line-height: 1.4; font-size: 0.95rem; }
+#pub-list a.pub-entry {
+    display: block;
+    margin: 10px 0;
+    line-height: 1.4;
+    font-size: 0.95rem;
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 8px 12px;
+    margin: 8px -12px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+#pub-list a.pub-entry:hover {
+    background-color: rgba(102, 126, 234, 0.08);
+}
+#pub-list a.pub-entry strong {
+    transition: color 0.2s ease, background-color 0.2s ease;
+    border-radius: 3px;
+    padding: 1px 3px;
+    margin: -1px -3px;
+}
+#pub-list a.pub-entry:hover strong {
+    color: #667eea;
+    background-color: rgba(102, 126, 234, 0.15);
+}
 #pub-controls { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
 #refresh-btn {
     padding: 6px 10px; border-radius: 8px; border: 1px solid #ddd;
@@ -96,65 +143,353 @@ h1 { font-size: 2.4rem; margin-bottom: 0.2rem; }
 #last-updated { color: var(--subtitle-color); font-size: 0.9rem; }
 a { color: var(--link-color); text-decoration: none; }
 
-/* Adventure Stats */
-.stats-grid {
-    display: flex;
-    gap: 6px;
-    justify-content: center;
-    margin-top: 10px;
-}
-.stat-card {
-    background: var(--card-bg);
-    border-radius: 12px;
-    box-shadow: 0 4px 20px var(--card-shadow);
-    padding: 6px 4px;
-    text-align: center;
-    flex: 1;
-    min-width: 60px;
-}
-.stat-label { 
-    color: var(--subtitle-color); 
-    font-size: 0.7rem; 
-    margin-bottom: 3px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    gap:3px; 
-}
-.stat-number { font-size: 1rem; font-weight: bold; color: var(--text-color); }
-
-@media (max-width: 780px) { 
-    .stats-grid { flex-direction: column; gap: 10px; } 
-}
 
 /* News Grid */
 #news-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
   gap: 12px;
+  justify-content: center;
 }
 
 .news-card { display: flex; flex-direction: column; align-items: center; }
 
-.news-card p { 
-  font-size: 0.9rem; 
-  color: var(--text-color); 
+.news-card p {
+  font-size: 0.9rem;
+  color: var(--text-color);
   margin: 8px 0 0;
   text-align: center; /* center the text */
 }
 
 /* === GRAYSCALE + HOVER TO COLOR === */
-.news-card img { 
-  border-radius: 8px; 
-  width: 100%; 
-  height: 150px; 
-  object-fit: cover; 
+.news-card img {
+  border-radius: 8px;
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
   filter: grayscale(100%);
   transition: filter 0.3s ease;
 }
 
 .news-card:hover img {
   filter: grayscale(0%);
+}
+
+/* Globe Widget */
+.globe-section {
+    position: relative;
+    overflow: hidden;
+}
+.globe-container {
+    position: relative;
+    width: 100%;
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0 -15px 0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+#globe-container {
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+}
+#globe-container:active {
+    cursor: grabbing;
+}
+
+/* Globe Legend */
+.globe-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--card-shadow);
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.7rem;
+    color: var(--subtitle-color);
+    padding: 3px 8px;
+    background: var(--bg-color);
+    border-radius: 12px;
+}
+.legend-emoji {
+    font-size: 0.9rem;
+}
+.legend-color {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+}
+
+/* Adventure Stats (now part of globe section) */
+.globe-section .stats-grid {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--card-shadow);
+}
+.globe-section .stat-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px var(--card-shadow);
+    padding: 6px 8px;
+    text-align: center;
+}
+.globe-section .stat-label {
+    color: var(--subtitle-color);
+    font-size: 0.7rem;
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    white-space: nowrap;
+}
+.stat-emoji {
+    font-size: 0.9rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1em;
+    height: 1em;
+}
+.globe-section .stat-number {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+@media (max-width: 780px) {
+    .globe-section .stats-grid {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* Globe tooltip */
+.globe-tooltip {
+    position: absolute;
+    padding: 6px 12px;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    pointer-events: none;
+    z-index: 100;
+    white-space: nowrap;
+}
+
+/* Timeline */
+.timeline {
+    position: relative;
+    padding-left: 32px;
+}
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, #ff6b6b, #a78bfa, #4ecdc4);
+    border-radius: 2px;
+    opacity: 0.4;
+}
+.timeline-item {
+    position: relative;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: var(--card-bg);
+    border: 1px solid transparent;
+    box-shadow: 0 2px 8px var(--card-shadow);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 60px;
+}
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+/* Dot - vertically centered on the line */
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -33px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    background: var(--card-bg);
+    border: 3px solid var(--subtitle-color);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+/* Outer glow ring */
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    left: -37px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+.timeline-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 16px var(--card-shadow);
+}
+.timeline-item:hover::before {
+    transform: translateY(-50%) translateX(-4px) scale(1.2);
+}
+.timeline-item:hover::after {
+    transform: translateY(-50%) translateX(-4px);
+}
+/* Current/Experience items */
+.timeline-item.current {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 107, 107, 0.05));
+    border-color: rgba(255, 107, 107, 0.3);
+}
+.timeline-item.current::before {
+    border-color: #ff6b6b;
+    background: var(--card-bg);
+}
+.timeline-item.current:hover::before {
+    background: #ff6b6b;
+    box-shadow: 0 0 8px rgba(255, 107, 107, 0.5);
+}
+.timeline-item.current.expanded::before {
+    background: #ff6b6b;
+}
+@keyframes pulse {
+    0%, 100% { transform: translateY(-50%) scale(1); opacity: 1; }
+    50% { transform: translateY(-50%) scale(1.1); opacity: 0.7; }
+}
+.timeline-item.current .timeline-year {
+    color: #ff6b6b;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+.timeline-item.current .timeline-title {
+    font-size: 1.15rem;
+}
+.timeline-item.current .timeline-org {
+    font-size: 0.9rem;
+}
+/* Education items */
+.timeline-item.education {
+    border-color: rgba(78, 205, 196, 0.2);
+}
+.timeline-item.education::before {
+    border-color: #4ecdc4;
+    background: var(--card-bg);
+}
+.timeline-item.education:hover::before {
+    background: #4ecdc4;
+    box-shadow: 0 0 8px rgba(78, 205, 196, 0.5);
+}
+.timeline-item.education.expanded::before {
+    background: #4ecdc4;
+}
+/* Research items */
+.timeline-item.research {
+    border-color: rgba(167, 139, 250, 0.2);
+}
+.timeline-item.research::before {
+    border-color: #a78bfa;
+    background: var(--card-bg);
+}
+.timeline-item.research:hover::before {
+    background: #a78bfa;
+    box-shadow: 0 0 8px rgba(167, 139, 250, 0.5);
+}
+.timeline-item.research.expanded::before {
+    background: #a78bfa;
+}
+/* Expanded state highlight */
+.timeline-item.expanded {
+    box-shadow: 0 4px 20px var(--card-shadow);
+}
+.timeline-year {
+    font-size: 0.7rem;
+    color: var(--subtitle-color);
+    font-weight: 600;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.timeline-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+.timeline-org {
+    color: var(--subtitle-color);
+    font-size: 0.8rem;
+}
+.timeline-details {
+    color: var(--subtitle-color);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    margin-top: 0;
+    padding-top: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+.timeline-item.expanded .timeline-details {
+    max-height: 300px;
+    opacity: 1;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--card-shadow);
+}
+/* Size variants based on importance */
+.timeline-item.large {
+    min-height: 70px;
+    padding: 14px 18px;
+}
+.timeline-item.large .timeline-title {
+    font-size: 1.1rem;
+}
+.timeline-item.medium {
+    min-height: 60px;
+}
+.timeline-item.medium .timeline-title {
+    font-size: 0.95rem;
+}
+.timeline-item.small {
+    min-height: 50px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+}
+.timeline-item.small .timeline-title {
+    font-size: 0.85rem;
+}
+.timeline-item.small .timeline-year {
+    font-size: 0.65rem;
+}
+.timeline-item.small .timeline-org {
+    font-size: 0.75rem;
 }
 
 </style>
@@ -169,8 +504,21 @@ a { color: var(--link-color); text-decoration: none; }
     <div class="profile-card">
         <img src="images/headshot1.jpeg" alt="Alex B Bak headshot" itemprop="image">
         <div class="social">
-            <a href="https://scholar.google.com/citations?user=TnT6AcUAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
-            <a href="https://www.linkedin.com/in/alexbbak/" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://scholar.google.com/citations?user=TnT6AcUAAAAJ&hl=en" target="_blank" rel="noopener" title="Google Scholar">
+                <svg class="social-icon-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z" fill="currentColor"/>
+                </svg>
+            </a>
+            <a href="https://www.linkedin.com/in/alexbbak/" target="_blank" rel="noopener" title="LinkedIn">
+                <svg class="social-icon-svg" height="512" viewBox="0 0 512 512" width="512" xmlns="http://www.w3.org/2000/svg">
+                    <rect height="512" rx="64" ry="64" width="512" x="0" y="0" fill="currentColor"/>
+                    <g transform="matrix(1.5537946,0,0,1.5537946,-140.87332,-132.64552)">
+                        <rect height="166.021" width="55.194" x="129.957" y="200.35699" fill="var(--card-bg)"/>
+                        <path d="m 157.927,120.303 c -18.884,0 -31.222,12.415 -31.222,28.687 0,15.93 11.963,28.687 30.491,28.687 h 0.357 c 19.245,0 31.224,-12.757 31.224,-28.687 -0.357,-16.272 -11.978,-28.687 -30.85,-28.687 z" fill="var(--card-bg)"/>
+                        <path d="m 320.604,196.453 c -29.277,0 -42.391,16.101 -49.734,27.41 v -23.506 h -55.18 c 0.732,15.573 0,166.021 0,166.021 h 55.179 V 273.66 c 0,-4.963 0.357,-9.924 1.82,-13.471 3.982,-9.911 13.068,-20.178 28.313,-20.178 19.959,0 27.955,15.23 27.955,37.539 v 88.828 h 55.182 v -95.206 c 0,-50.996 -27.227,-74.719 -63.535,-74.719 z" fill="var(--card-bg)"/>
+                    </g>
+                </svg>
+            </a>
         </div>
 
         <!-- News Section -->
@@ -179,20 +527,24 @@ a { color: var(--link-color); text-decoration: none; }
           <div id="news-grid"></div>
         </section>
 
-        <!-- Adventure Stats -->
-        <section class="section stats-section">
+        <!-- Globe Widget - Places I've Been -->
+        <section class="section globe-section">
             <h2>Adventure Stats</h2>
+            <div class="globe-container">
+                <div id="globe-container"></div>
+            </div>
+            <!-- Adventure Stats -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-label">Countries 🌍</div>
+                    <div class="stat-label"><span class="stat-emoji">🌍</span> Countries</div>
                     <div class="stat-number" id="countries-counter">0</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Ski Areas 🎿</div>
+                    <div class="stat-label"><span class="stat-emoji">🎿</span> Slopes</div>
                     <div class="stat-number" id="ski-counter">0</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Dives 🤿</div>
+                    <div class="stat-label"><span class="stat-emoji">🤿</span> Dives</div>
                     <div class="stat-number" id="dives-counter">0</div>
                 </div>
             </div>
@@ -203,28 +555,81 @@ a { color: var(--link-color); text-decoration: none; }
 <main>
 <section class="section" itemprop="description">
     <h2>Bio</h2>
-    <p>Alex Bak is a physician, researcher, and digital health innovator with a focus on improving care for people living with chronic pain, disability, and those undergoing surgery. His work sits at the intersection of pain, mood, evaluation, and biomedical data science. 
+    <p>Alex Bak is a physician, researcher, and digital health innovator with a focus on improving care for people living with chronic pain, disability, and those undergoing surgery. His work sits at the intersection of pain, mood, evaluation, and biomedical data science.
         His research uses advanced modelling on large-scale data to understand how these conditions and novel therapies shape long-term health.</p>
     <p>
-        Alex has received broad international recognition for his academic contributions, delivering over 25 podium presentations at premier scientific meetings worldwide. His work has earned several distinctions, including back-to-back Best Papers Awards at the North American Spine Society meetings (2022, 2023) and a finalist placement for the Canadian Orthopaedic Association’s Founder’s Medal. His work has been further highlighted by honours such as the Anesthesia Patient Safety Foundation Award and the Canadian Anesthesiologists’ Society Abstract Award.
+        Alex has received broad international recognition for his academic contributions, delivering over 25 podium presentations at premier scientific meetings worldwide. His work has earned several distinctions, including back-to-back Best Papers Awards at the North American Spine Society meetings (2022, 2023) and a finalist placement for the Canadian Orthopaedic Association's Founder's Medal. His work has been further highlighted by honours such as the Anesthesia Patient Safety Foundation Award and the Canadian Anesthesiologists' Society Abstract Award.
         His work has been funded by the Canadian Anesthesia Research Foundation, Institute of Medical Science and the University of Toronto Faculty of Medicine.
     </p>
-        <p>In 2024, Alex was elected co-Chair of the Resident Section of the Canadian Anesthesiologists’ Society (CAS) and a member of the CAS Clinical Practice Guidelines Committee. Subsequently, he was appointed as board member of the CAS Board of Directors.</p>
+        <p>In 2024, Alex was elected co-Chair of the Resident Section of the Canadian Anesthesiologists' Society (CAS) and a member of the CAS Clinical Practice Guidelines Committee. Subsequently, he was appointed as board member of the CAS Board of Directors.</p>
 
     <p>Alex grew up in Seoul and rural South Korea, later moving to Southern Ontario. He completed medical school and advanced training in biomedical engineering at the University of Toronto, where he is currently a resident physician in the Deparmtent of Anesthesiology and Pain Medicine.</p>
 </section>
 
 <section class="section">
-    <h2>Education</h2>
-    <h4>University of Toronto</h4>
-    <p>MD in Medicine — 2024<br>MEng in Biomedical Engineering — 2023</p>
-    <h4>McMaster University</h4>
-    <p>BHSc (Honours) in Health Sciences — 2020</p>
-</section>
-
-<section class="section">
-    <h2>Experience</h2>
-    <p><strong>Resident Physician, Anesthesiology</strong><br>University of Toronto (2024–Present)</p>
+    <h2>Timeline</h2>
+    <div class="timeline" id="timeline">
+        <div class="timeline-item current large expanded">
+            <div class="timeline-year">Jul 2024 – Present</div>
+            <div class="timeline-title">🩺 Resident Physician, Anesthesiology</div>
+            <div class="timeline-org">University of Toronto</div>
+            <div class="timeline-details">
+                • Board Representative, Canadian Anesthesiologists' Society Board of Directors<br>
+                • Co-chair, Canadian Anesthesiologists' Society Resident Section<br>
+                • Clinical Practice Guidelines Committee
+            </div>
+        </div>
+        <div class="timeline-item research medium">
+            <div class="timeline-year">Nov 2020 – Present</div>
+            <div class="timeline-title">🔬 AI Research Fellow</div>
+            <div class="timeline-org">University Health Network</div>
+            <div class="timeline-details">Funding: AI Studentship, Temerty Centre for AI Research and Education in Medicine</div>
+        </div>
+        <div class="timeline-item education medium">
+            <div class="timeline-year">2024</div>
+            <div class="timeline-title">🎓 MD in Medicine</div>
+            <div class="timeline-org">University of Toronto</div>
+            <div class="timeline-details">Temerty Faculty of Medicine</div>
+        </div>
+        <div class="timeline-item education small">
+            <div class="timeline-year">2023</div>
+            <div class="timeline-title">🎓 MEng in Biomedical Engineering</div>
+            <div class="timeline-org">University of Toronto</div>
+            <div class="timeline-details">Focus on biomedical data science and machine learning</div>
+        </div>
+        <div class="timeline-item research small">
+            <div class="timeline-year">Apr – Jun 2020</div>
+            <div class="timeline-title">🔬 Research Assistant</div>
+            <div class="timeline-org">Stanford University School of Medicine</div>
+            <div class="timeline-details">3-month research position</div>
+        </div>
+        <div class="timeline-item research small">
+            <div class="timeline-year">May 2019 – Apr 2020</div>
+            <div class="timeline-title">🔬 Research Intern, Stem Cell Biology</div>
+            <div class="timeline-org">Johns Hopkins University School of Medicine</div>
+            <div class="timeline-details">
+                Kennedy Krieger Institute & Johns Hopkins Hospital<br>
+                Dept. of Neurology and Neurosurgery<br>
+                Funding: T. Russell Wilkins Memorial Scholarship, Global Experience Award
+            </div>
+        </div>
+        <div class="timeline-item education small">
+            <div class="timeline-year">2020</div>
+            <div class="timeline-title">🎓 BHSc (Honours) in Health Sciences</div>
+            <div class="timeline-org">McMaster University</div>
+            <div class="timeline-details">Bachelor of Health Sciences with Honours</div>
+        </div>
+        <div class="timeline-item research small">
+            <div class="timeline-year">Sep 2017 – May 2020</div>
+            <div class="timeline-title">🔬 R&D Lead, Virtual Reality Devices</div>
+            <div class="timeline-org">McMaster University Department of Medicine</div>
+            <div class="timeline-details">
+                • Created portable, affordable VR tool for anatomy education in low-resource settings<br>
+                • Led technology validation with randomized, double-blind controlled trial<br>
+                • Published in peer-reviewed anatomy education journal
+            </div>
+        </div>
+    </div>
 </section>
 
 <section class="section" id="publications">
@@ -235,26 +640,298 @@ a { color: var(--link-color); text-decoration: none; }
     </div>
     <div id="pub-list">Loading publications...</div>
 </section>
+
 </main>
 </div>
 
-<script>
-// Animate Counters
-function animateCounter(id, target){
-    const el=document.getElementById(id);
-    let count=0;
-    const step=Math.ceil(target/50);
-    const interval=setInterval(()=>{
-        count+=step;
-        if(count>=target){count=target; clearInterval(interval);}
-        el.textContent=count;
-    },20);
-}
+<!-- Globe.gl Library -->
+<script src="https://unpkg.com/globe.gl@2.27.0/dist/globe.gl.min.js"></script>
 
-// Adventure counters
-animateCounter('countries-counter', 21);
-animateCounter('ski-counter', 25);
-animateCounter('dives-counter', 65);
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // ============================================
+    // GLOBE.GL ADVANCED WIDGET
+    // ============================================
+    const container = document.getElementById('globe-container');
+    if (container) {
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        // ====== ADVENTURE DATA ======
+        // Countries to highlight (visited)
+        const visitedCountries = [
+            { country: 'Canada', code: 'CAN', color: '#ffe66d', activity: 'home' },
+            { country: 'Philippines', code: 'PHL', color: '#ff6b6b', activity: 'dived' },
+            { country: 'Portugal', code: 'PRT', color: '#4ecdc4', activity: 'visited' },
+            { country: 'Vietnam', code: 'VNM', color: '#4ecdc4', activity: 'visited' },
+            { country: 'South Korea', code: 'KOR', color: '#4ecdc4', activity: 'visited' },
+            { country: 'United States', code: 'USA', color: '#4ecdc4', activity: 'visited' },
+            { country: 'Taiwan', code: 'TWN', color: '#4ecdc4', activity: 'visited' }
+        ];
+
+        // Specific location markers with emojis
+        const adventureMarkers = [
+            {
+                name: 'Toronto',
+                lat: 43.6532,
+                lng: -79.3832,
+                emoji: '🏠',
+                activity: 'Home',
+                color: '#ffe66d'
+            },
+            {
+                name: 'Manila',
+                lat: 14.5995,
+                lng: 120.9842,
+                emoji: '🤿',
+                activity: 'Scuba diving in Philippines',
+                color: '#ff6b6b'
+            },
+            {
+                name: 'Porto',
+                lat: 41.1579,
+                lng: -8.6291,
+                emoji: '📍',
+                activity: 'Visited Porto',
+                color: '#4ecdc4'
+            },
+            {
+                name: 'Ho Chi Minh',
+                lat: 10.8231,
+                lng: 106.6297,
+                emoji: '📍',
+                activity: 'Visited Vietnam',
+                color: '#4ecdc4'
+            },
+            {
+                name: 'Seoul',
+                lat: 37.5665,
+                lng: 126.9780,
+                emoji: '📍',
+                activity: 'Visited South Korea',
+                color: '#4ecdc4'
+            },
+            {
+                name: 'California',
+                lat: 36.7783,
+                lng: -119.4179,
+                emoji: '📍',
+                activity: 'Visited California',
+                color: '#4ecdc4'
+            },
+            {
+                name: 'Taipei',
+                lat: 25.0330,
+                lng: 121.5654,
+                emoji: '📍',
+                activity: 'Visited Taiwan',
+                color: '#4ecdc4'
+            }
+        ];
+
+        // Create the globe
+        const globe = Globe()
+            .globeImageUrl(isDark
+                ? '//unpkg.com/three-globe/example/img/earth-dark.jpg'
+                : '//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+            .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
+            .backgroundImageUrl(isDark
+                ? '//unpkg.com/three-globe/example/img/night-sky.png'
+                : null)
+            .backgroundColor(isDark ? '#1e1e1e' : '#fafafa')
+            .showAtmosphere(true)
+            .atmosphereColor(isDark ? '#4ecdc4' : '#3a86ff')
+            .atmosphereAltitude(0.15)
+            .width(container.offsetWidth)
+            .height(container.offsetHeight);
+
+        // Mount globe
+        globe(container);
+
+        // Auto-rotate
+        globe.controls().autoRotate = true;
+        globe.controls().autoRotateSpeed = 0.3;
+        globe.controls().enableZoom = true;
+        globe.controls().minDistance = 150;
+        globe.controls().maxDistance = 400;
+
+        // ====== LOAD COUNTRY POLYGONS ======
+        fetch('https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson')
+            .then(res => res.json())
+            .then(countries => {
+                // Filter to only show visited countries
+                const visitedCodes = visitedCountries.map(c => c.code);
+
+                globe
+                    .polygonsData(countries.features.filter(d =>
+                        visitedCodes.includes(d.properties.ISO_A3)
+                    ))
+                    .polygonCapColor(feat => {
+                        const visited = visitedCountries.find(c => c.code === feat.properties.ISO_A3);
+                        return visited ? visited.color + 'cc' : 'rgba(100,100,100,0.3)';
+                    })
+                    .polygonSideColor(() => 'rgba(100,100,100,0.1)')
+                    .polygonStrokeColor(() => '#fff')
+                    .polygonAltitude(0.01)
+                    .polygonLabel(feat => {
+                        const visited = visitedCountries.find(c => c.code === feat.properties.ISO_A3);
+                        const emoji = visited?.activity === 'dived' ? '🤿' :
+                                      visited?.activity === 'home' ? '🏠' : '✈️';
+                        return `
+                            <div style="
+                                background: rgba(0,0,0,0.8);
+                                color: white;
+                                padding: 8px 12px;
+                                border-radius: 8px;
+                                font-size: 12px;
+                            ">
+                                <b>${emoji} ${feat.properties.NAME}</b><br/>
+                                <span style="color: ${visited?.color}">${visited?.activity || 'Visited'}</span>
+                            </div>
+                        `;
+                    })
+                    .onPolygonClick((polygon, event, coords) => {
+                        // Zoom to clicked country
+                        globe.pointOfView({
+                            lat: coords.lat,
+                            lng: coords.lng,
+                            altitude: 1.5
+                        }, 1000);
+                    })
+                    .onPolygonHover(polygon => {
+                        container.style.cursor = polygon ? 'pointer' : 'grab';
+                    });
+            });
+
+        // ====== ADD EMOJI MARKERS ======
+        globe
+            .htmlElementsData(adventureMarkers)
+            .htmlElement(d => {
+                const el = document.createElement('div');
+                el.style.cssText = 'position: relative; pointer-events: auto;';
+                el.innerHTML = `
+                    <div style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        cursor: pointer;
+                        position: absolute;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%, -100%);
+                    ">
+                        <span style="
+                            font-size: 20px;
+                            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+                            transition: transform 0.2s;
+                        " class="marker-emoji">${d.emoji}</span>
+                        <span style="
+                            background: rgba(0,0,0,0.7);
+                            color: white;
+                            padding: 2px 6px;
+                            border-radius: 4px;
+                            font-size: 8px;
+                            margin-top: 1px;
+                            white-space: nowrap;
+                        ">${d.name}</span>
+                    </div>
+                `;
+
+                // Hover effect
+                el.onmouseenter = () => {
+                    el.querySelector('.marker-emoji').style.transform = 'scale(1.3)';
+                };
+                el.onmouseleave = () => {
+                    el.querySelector('.marker-emoji').style.transform = 'scale(1)';
+                };
+
+                // Click to zoom
+                el.onclick = (event) => {
+                    globe.pointOfView({
+                        lat: d.lat,
+                        lng: d.lng,
+                        altitude: 1.2
+                    }, 1000);
+
+                    // Show activity tooltip
+                    showTooltip(d.activity, event);
+                };
+
+                return el;
+            })
+            .htmlLat(d => d.lat)
+            .htmlLng(d => d.lng)
+            .htmlAltitude(0.01);
+
+        // ====== TOOLTIP FUNCTION ======
+        function showTooltip(text, event) {
+            // Remove existing tooltip
+            const existing = document.querySelector('.globe-tooltip');
+            if (existing) existing.remove();
+
+            const tooltip = document.createElement('div');
+            tooltip.className = 'globe-tooltip';
+            tooltip.textContent = text;
+            tooltip.style.left = event.clientX + 'px';
+            tooltip.style.top = (event.clientY - 40) + 'px';
+            document.body.appendChild(tooltip);
+
+            setTimeout(() => tooltip.remove(), 2000);
+        }
+
+        // ====== HANDLE RESIZE ======
+        window.addEventListener('resize', () => {
+            globe.width(container.offsetWidth);
+            globe.height(container.offsetHeight);
+        });
+
+        // ====== INITIAL VIEW ======
+        // Start with a nice view showing the markers
+        setTimeout(() => {
+            globe.pointOfView({ lat: 30, lng: 100, altitude: 2.5 }, 2000);
+        }, 500);
+    }
+
+    // ============================================
+    // COUNTER ANIMATIONS
+    // ============================================
+    function animateCounter(id, target){
+        const el = document.getElementById(id);
+        let count = 0;
+        const step = Math.ceil(target / 50);
+        const interval = setInterval(() => {
+            count += step;
+            if (count >= target) {
+                count = target;
+                clearInterval(interval);
+            }
+            el.textContent = count;
+        }, 20);
+    }
+
+    animateCounter('countries-counter', 21);
+    animateCounter('ski-counter', 25);
+    animateCounter('dives-counter', 65);
+
+    // ============================================
+    // TIMELINE ACCORDION
+    // ============================================
+    const timeline = document.getElementById('timeline');
+    if (timeline) {
+        const items = timeline.querySelectorAll('.timeline-item');
+        items.forEach(item => {
+            item.addEventListener('click', () => {
+                // If clicking the already expanded item, just collapse it
+                if (item.classList.contains('expanded')) {
+                    item.classList.remove('expanded');
+                    return;
+                }
+                // Collapse all items
+                items.forEach(i => i.classList.remove('expanded'));
+                // Expand clicked item
+                item.classList.add('expanded');
+            });
+        });
+    }
 
 // News Articles & Auto Thumbnail
 const newsArticles = [
@@ -294,12 +971,14 @@ async function renderNews() {
   }
 }
 
-renderNews();
+    renderNews();
 
-// Publications (PubMed)
+    // ============================================
+    // PUBLICATIONS (PubMed)
+    // ============================================
 async function loadPublications(forceRefresh=false){
-    const cacheKey="pub_cache_html";
-    const cacheTimeKey="pub_cache_time";
+    const cacheKey="pub_cache_html_v3";
+    const cacheTimeKey="pub_cache_time_v3";
     const maxAge=1000*60*60*6;
     try{
         const now=Date.now();
@@ -338,10 +1017,14 @@ async function loadPublications(forceRefresh=false){
             const journal=pub.source||pub.fulljournalname||'';
             let doi=null;if(Array.isArray(pub.articleids)){const doiObj=pub.articleids.find(id=>id.idtype && id.idtype.toLowerCase()==='doi');if(doiObj)doi=doiObj.value||null;}
             const pmLink=pub.uid?`https://pubmed.ncbi.nlm.nih.gov/${pub.uid}/`:null;
-            html+=`<p>${counter}. ${escapeHtml(authors)} <strong>${escapeHtml(title)}</strong>. <em>${escapeHtml(journal)}</em> ${year?'. '+escapeHtml(year)+'.':''}`;
-            if(doi) html+=` <a href="https://doi.org/${encodeURIComponent(doi)}" target="_blank" rel="noopener">doi:${escapeHtml(doi)}</a>`;
-            if(pmLink) html+=` <a href="${pmLink}" target="_blank" rel="noopener">PubMed</a>`;
-            html+='</p>';counter++;
+            const entryLink = pmLink || (doi ? `https://doi.org/${encodeURIComponent(doi)}` : null);
+            const content = `${counter}. ${escapeHtml(authors)} <strong>${escapeHtml(title)}</strong>. <em>${escapeHtml(journal)}</em>${year?'. '+escapeHtml(year)+'.':''}`;
+            if (entryLink) {
+                html+=`<a href="${entryLink}" target="_blank" rel="noopener" class="pub-entry">${content}</a>`;
+            } else {
+                html+=`<p class="pub-entry">${content}</p>`;
+            }
+            counter++;
         }
         document.getElementById("pub-list").innerHTML=html;
         localStorage.setItem(cacheKey,html);
@@ -349,16 +1032,12 @@ async function loadPublications(forceRefresh=false){
         document.getElementById("last-updated-time").innerText=new Date().toLocaleString();
     }catch(err){console.error('Error loading publications:',err);document.getElementById("pub-list").innerText="Error loading publications.";}
 }
+
 function escapeHtml(str){if(!str)return'';return String(str).replace(/[&<>\"'`]/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":"&#39;",'`':'&#96;'})[s]);}
 
-document.addEventListener('DOMContentLoaded',()=>{
     document.getElementById('refresh-btn').addEventListener('click',()=>{loadPublications(true);});
     loadPublications();
 });
 </script>
 </body>
 </html>
-
-
-
-
