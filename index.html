@@ -131,7 +131,7 @@ h1 { font-size: 2.4rem; margin-bottom: 0.2rem; }
     padding: 1px 3px;
     margin: -1px -3px;
 }
-#pub-list a.pub-entry:hover strong {
+#pub-list .pub-entry:hover strong {
     color: #667eea;
     background-color: rgba(102, 126, 234, 0.15);
 }
@@ -892,25 +892,68 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ============================================
-    // COUNTER ANIMATIONS
+    // COUNTER ANIMATIONS (with easing & scroll trigger)
     // ============================================
-    function animateCounter(id, target){
+    function animateCounter(id, target, duration = 2000) {
         const el = document.getElementById(id);
-        let count = 0;
-        const step = Math.ceil(target / 50);
-        const interval = setInterval(() => {
-            count += step;
-            if (count >= target) {
-                count = target;
-                clearInterval(interval);
+        if (!el) return;
+
+        const startTime = performance.now();
+
+        // Very gentle ease-out: 60% complete at halfway point
+        function easeOutGentle(t) {
+            return Math.pow(t, 0.74);
+        }
+
+        function update(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easedProgress = easeOutGentle(progress);
+            const currentValue = Math.floor(easedProgress * target);
+
+            el.textContent = currentValue;
+
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            } else {
+                el.textContent = target;
             }
-            el.textContent = count;
-        }, 20);
+        }
+
+        requestAnimationFrame(update);
     }
 
-    animateCounter('countries-counter', 21);
-    animateCounter('ski-counter', 25);
-    animateCounter('dives-counter', 65);
+    // Trigger counters when stats section scrolls into view
+    const statsSection = document.querySelector('.globe-section');
+    let countersStarted = false;
+
+    function startCounters() {
+        if (countersStarted) return;
+        countersStarted = true;
+        // All counters start and end together
+        animateCounter('countries-counter', 21, 2000);
+        animateCounter('ski-counter', 25, 2000);
+        animateCounter('dives-counter', 65, 2000);
+    }
+
+    if (statsSection) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    startCounters();
+                    observer.disconnect(); // Stop observing after triggered
+                }
+            });
+        }, {
+            threshold: 0.5,      // 50% of element must be visible
+            rootMargin: '0px'    // No margin - must actually be in viewport
+        });
+
+        // Delay observer setup to avoid immediate trigger on page load
+        requestAnimationFrame(() => {
+            observer.observe(statsSection);
+        });
+    }
 
     // ============================================
     // TIMELINE ACCORDION
