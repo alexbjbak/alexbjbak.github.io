@@ -122,6 +122,28 @@ h1 { font-size: 2.4rem; margin-bottom: 0.2rem; }
     border-radius: 8px;
     transition: background-color 0.2s ease;
 }
+#pub-list.collapsed a.pub-entry:nth-child(n+11) {
+    display: none;
+}
+#show-more-container {
+    text-align: center;
+    margin-top: 10px;
+}
+#show-more-btn {
+    padding: 8px 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: var(--card-bg);
+    cursor: pointer;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+#show-more-btn:hover {
+    background-color: rgba(102, 126, 234, 0.08);
+    border-color: #667eea;
+}
 #pub-list a.pub-entry:hover {
     background-color: rgba(102, 126, 234, 0.08);
 }
@@ -643,7 +665,10 @@ a { color: var(--link-color); text-decoration: none; }
         <button id="refresh-btn" title="Force refresh publications">Refresh</button>
         <div id="last-updated">Last updated: <span id="last-updated-time">—</span></div>
     </div>
-    <div id="pub-list">Loading publications...</div>
+    <div id="pub-list" class="collapsed">Loading publications...</div>
+    <div id="show-more-container" style="display: none;">
+        <button id="show-more-btn">Show More</button>
+    </div>
 </section>
 
 </main>
@@ -1022,68 +1047,136 @@ async function renderNews() {
     renderNews();
 
     // ============================================
-    // PUBLICATIONS (PubMed)
+    // PUBLICATIONS (OpenAlex with ORCID)
     // ============================================
-async function loadPublications(forceRefresh=false){
-    const cacheKey="pub_cache_html_v3";
-    const cacheTimeKey="pub_cache_time_v3";
-    const maxAge=1000*60*60*6;
-    try{
-        const now=Date.now();
-        const cached=localStorage.getItem(cacheKey);
-        const cachedTime=parseInt(localStorage.getItem(cacheTimeKey)||"0",10);
-        if(!forceRefresh && cached && cachedTime && now-cachedTime<maxAge){
-            document.getElementById("pub-list").innerHTML=cached;
-            document.getElementById("last-updated-time").innerText=new Date(cachedTime).toLocaleString();
-            return;
+    function updateShowMoreButton() {
+        const pubList = document.getElementById("pub-list");
+        const showMoreContainer = document.getElementById("show-more-container");
+        const entries = pubList.querySelectorAll('.pub-entry');
+        if (entries.length > 10) {
+            showMoreContainer.style.display = "block";
+        } else {
+            showMoreContainer.style.display = "none";
         }
-        const query=encodeURIComponent("Alex Bak[author]");
-        const esearchUrl=`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${query}&retmode=json&retmax=100`;
-        const esearchRes=await fetch(esearchUrl);
-        const esearchData=await esearchRes.json();
-        const ids=esearchData?.esearchresult?.idlist||[];
-        if(!ids.length){
-            const noHtml='<p>No publications found.</p>';
-            document.getElementById("pub-list").innerHTML=noHtml;
-            localStorage.setItem(cacheKey,noHtml);
+    }
+
+    async function loadPublications(forceRefresh=false){
+        const cacheKey="pub_cache_html_v5";
+        const cacheTimeKey="pub_cache_time_v5";
+        const maxAge=1000*60*60*24; // Cache for 24 hours
+        const orcid = "0000-0003-4482-4792";
+        
+        try{
+            const now=Date.now();
+            const cached=localStorage.getItem(cacheKey);
+            const cachedTime=parseInt(localStorage.getItem(cacheTimeKey)||"0",10);
+            
+            if(!forceRefresh && cached && cachedTime && now-cachedTime<maxAge){
+                document.getElementById("pub-list").innerHTML=cached;
+                document.getElementById("last-updated-time").innerText=new Date(cachedTime).toLocaleString();
+                updateShowMoreButton();
+                return;
+            }
+
+            // OpenAlex API is much more comprehensive than PubMed for interdisciplinary work
+            const url = `https://api.openalex.org/works?filter=author.orcid:https://orcid.org/${orcid}&sort=publication_year:desc,publication_date:desc`;
+            const res = await fetch(url);
+            const data = await res.json();
+            const works = data.results || [];
+
+            if(!works.length){
+                const noHtml='<p>No publications found.</p>';
+                document.getElementById("pub-list").innerHTML=noHtml;
+                localStorage.setItem(cacheKey,noHtml);
+                localStorage.setItem(cacheTimeKey,Date.now().toString());
+                document.getElementById("last-updated-time").innerText=new Date().toLocaleString();
+                updateShowMoreButton();
+                return;
+            }
+
+            let html='';
+            let counter=1;
+            
+            for(const work of works){
+                // Skip "works" that are likely just collections of abstracts or front matter
+                const type = work.type?.toLowerCase();
+                if(type === 'paratext' || type === 'frontmatter') continue;
+
+                // Format authors
+                let authors = (work.authorships || []).map(a => a.author.display_name);
+                if(authors.length > 3){
+                    authors = authors.slice(0, 3).join(', ') + ', et al.';
+                } else {
+                    authors = authors.join(', ');
+                }
+
+                let title = work.title || 'Untitled';
+                
+                // Clean up titles that are clearly collections of abstracts (very long titles)
+                if (title.length > 500 || title.includes('Abstract ID') || title.includes('CPSS-')) {
+                    // If it's a collection, try to extract just the first part or label it as Proceedings
+                    if (title.includes('Abstract ID')) {
+                        const parts = title.split(/Abstract ID \d+/);
+                        if (parts[0].length > 10) {
+                            title = parts[0].trim().replace(/\.+$/, '') + ' (Conference Proceedings)';
+                        } else if (title.includes('Society')) {
+                             const societyMatch = title.match(/.*?(Society|Conference|Meeting)/);
+                             title = (societyMatch ? societyMatch[0] : 'Conference Abstracts') + ' (Proceedings)';
+                        }
+                    } else if (title.length > 300) {
+                        title = title.substring(0, 300) + '... (Proceedings)';
+                    }
+                }
+
+                const year = work.publication_year || '';
+                const journal = work.primary_location?.source?.display_name || '';
+                const doi = work.doi || null;
+                const entryLink = doi || work.id;
+
+                const content = `${counter}. ${escapeHtml(authors)}. <strong>${escapeHtml(title)}</strong>. <em>${escapeHtml(journal)}</em>${year?'. '+escapeHtml(year)+'.':''}`;
+                
+                if (entryLink) {
+                    html+=`<a href="${entryLink}" target="_blank" rel="noopener" class="pub-entry">${content}</a>`;
+                } else {
+                    html+=`<p class="pub-entry">${content}</p>`;
+                }
+                counter++;
+            }
+
+            document.getElementById("pub-list").innerHTML=html;
+            updateShowMoreButton();
+
+            localStorage.setItem(cacheKey,html);
             localStorage.setItem(cacheTimeKey,Date.now().toString());
             document.getElementById("last-updated-time").innerText=new Date().toLocaleString();
-            return;
+        }catch(err){
+            console.error('Error loading publications:',err);
+            document.getElementById("pub-list").innerText="Error loading publications.";
         }
-        const idString=ids.join(",");
-        const esummaryUrl=`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=${idString}&retmode=json`;
-        const esummaryRes=await fetch(esummaryUrl);
-        const esummaryData=await esummaryRes.json();
-        let results=Object.values(esummaryData.result).filter(r=>r&&r.uid);
-        results.sort((a,b)=>{const ay=a.pubdate?a.pubdate.substring(0,4)|0:0;const by=b.pubdate?b.pubdate.substring(0,4)|0:0;return by-ay;});
-        let html='';let counter=1;
-        for(const pub of results){
-            let authors=(pub.authors||[]).map(a=>a.name||a);
-            if(authors.length>3){authors=authors.slice(0,3).join(', ')+', et al.';}else{authors=authors.join(', ');}
-            const title=pub.title||pub.article_title||'';
-            const year=pub.pubdate?pub.pubdate.substring(0,4):'';
-            const journal=pub.source||pub.fulljournalname||'';
-            let doi=null;if(Array.isArray(pub.articleids)){const doiObj=pub.articleids.find(id=>id.idtype && id.idtype.toLowerCase()==='doi');if(doiObj)doi=doiObj.value||null;}
-            const pmLink=pub.uid?`https://pubmed.ncbi.nlm.nih.gov/${pub.uid}/`:null;
-            const entryLink = pmLink || (doi ? `https://doi.org/${encodeURIComponent(doi)}` : null);
-            const content = `${counter}. ${escapeHtml(authors)} <strong>${escapeHtml(title)}</strong>. <em>${escapeHtml(journal)}</em>${year?'. '+escapeHtml(year)+'.':''}`;
-            if (entryLink) {
-                html+=`<a href="${entryLink}" target="_blank" rel="noopener" class="pub-entry">${content}</a>`;
-            } else {
-                html+=`<p class="pub-entry">${content}</p>`;
-            }
-            counter++;
-        }
-        document.getElementById("pub-list").innerHTML=html;
-        localStorage.setItem(cacheKey,html);
-        localStorage.setItem(cacheTimeKey,Date.now().toString());
-        document.getElementById("last-updated-time").innerText=new Date().toLocaleString();
-    }catch(err){console.error('Error loading publications:',err);document.getElementById("pub-list").innerText="Error loading publications.";}
-}
+    }
 
 function escapeHtml(str){if(!str)return'';return String(str).replace(/[&<>\"'`]/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":"&#39;",'`':'&#96;'})[s]);}
 
     document.getElementById('refresh-btn').addEventListener('click',()=>{loadPublications(true);});
+    
+    // Show More Publications Toggle
+    const showMoreBtn = document.getElementById('show-more-btn');
+    const pubList = document.getElementById('pub-list');
+    if (showMoreBtn && pubList) {
+        showMoreBtn.addEventListener('click', () => {
+            const isCollapsed = pubList.classList.contains('collapsed');
+            if (isCollapsed) {
+                pubList.classList.remove('collapsed');
+                showMoreBtn.textContent = 'Show Less';
+            } else {
+                pubList.classList.add('collapsed');
+                showMoreBtn.textContent = 'Show More';
+                // Scroll back to publications header if showing less
+                document.getElementById('publications').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    }
+
     loadPublications();
 
     // Email Obfuscation
