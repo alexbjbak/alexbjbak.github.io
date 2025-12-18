@@ -519,6 +519,11 @@ a { color: var(--link-color); text-decoration: none; }
                     </g>
                 </svg>
             </a>
+            <a href="#" id="contact-link" title="Email Me">
+                <svg class="social-icon-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" fill="currentColor"/>
+                </svg>
+            </a>
         </div>
 
         <!-- News Section -->
@@ -1080,6 +1085,17 @@ function escapeHtml(str){if(!str)return'';return String(str).replace(/[&<>\"'`]/
 
     document.getElementById('refresh-btn').addEventListener('click',()=>{loadPublications(true);});
     loadPublications();
+
+    // Email Obfuscation
+    const contactLink = document.getElementById('contact-link');
+    if (contactLink) {
+        contactLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            const u = 'alex.bak';
+            const d = 'mail.utoronto.ca';
+            window.location.href = `mailto:${u}@${d}`;
+        });
+    }
 });
 </script>
 </body>
