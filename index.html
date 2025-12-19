@@ -1061,8 +1061,8 @@ async function renderNews() {
     }
 
     async function loadPublications(forceRefresh=false){
-        const cacheKey="pub_cache_html_v5";
-        const cacheTimeKey="pub_cache_time_v5";
+        const cacheKey="pub_cache_html_v7";
+        const cacheTimeKey="pub_cache_time_v7";
         const maxAge=1000*60*60*24; // Cache for 24 hours
         const orcid = "0000-0003-4482-4792";
         
@@ -1079,7 +1079,7 @@ async function renderNews() {
             }
 
             // OpenAlex API is much more comprehensive than PubMed for interdisciplinary work
-            const url = `https://api.openalex.org/works?filter=author.orcid:https://orcid.org/${orcid}&sort=publication_year:desc,publication_date:desc`;
+            const url = `https://api.openalex.org/works?filter=author.orcid:https://orcid.org/${orcid}&sort=publication_year:desc,publication_date:desc&per_page=100`;
             const res = await fetch(url);
             const data = await res.json();
             const works = data.results || [];
@@ -1101,6 +1101,10 @@ async function renderNews() {
                 // Skip "works" that are likely just collections of abstracts or front matter
                 const type = work.type?.toLowerCase();
                 if(type === 'paratext' || type === 'frontmatter') continue;
+                
+                // To keep only "full publications" like PubMed, we filter for works that have a PubMed ID
+                // Conference abstracts and proceedings usually don't have a PMID in OpenAlex unless they are full papers
+                if (!work.ids?.pmid) continue;
 
                 // Format authors
                 let authors = (work.authorships || []).map(a => a.author.display_name);
@@ -1112,16 +1116,12 @@ async function renderNews() {
 
                 let title = work.title || 'Untitled';
                 
-                // Clean up titles that are clearly collections of abstracts (very long titles)
+                // Truncate mega-abstracts / conference proceeding entries (fallback safety)
                 if (title.length > 500 || title.includes('Abstract ID') || title.includes('CPSS-')) {
-                    // If it's a collection, try to extract just the first part or label it as Proceedings
                     if (title.includes('Abstract ID')) {
                         const parts = title.split(/Abstract ID \d+/);
                         if (parts[0].length > 10) {
                             title = parts[0].trim().replace(/\.+$/, '') + ' (Conference Proceedings)';
-                        } else if (title.includes('Society')) {
-                             const societyMatch = title.match(/.*?(Society|Conference|Meeting)/);
-                             title = (societyMatch ? societyMatch[0] : 'Conference Abstracts') + ' (Proceedings)';
                         }
                     } else if (title.length > 300) {
                         title = title.substring(0, 300) + '... (Proceedings)';
@@ -1131,7 +1131,9 @@ async function renderNews() {
                 const year = work.publication_year || '';
                 const journal = work.primary_location?.source?.display_name || '';
                 const doi = work.doi || null;
-                const entryLink = doi || work.id;
+                const pmid = work.ids?.pmid || null;
+                // Use PMID link if available (user preference for PubMed style), else DOI
+                const entryLink = pmid || doi || work.id;
 
                 const content = `${counter}. ${escapeHtml(authors)}. <strong>${escapeHtml(title)}</strong>. <em>${escapeHtml(journal)}</em>${year?'. '+escapeHtml(year)+'.':''}`;
                 
