@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title itemprop="name">Alex Bak</title>
 <meta itemprop="jobTitle" content="Anesthesiology Resident">
 <meta itemprop="affiliation" content="University of Toronto">
@@ -12,8 +15,9 @@
 :root {
     --bg-color: #fafafa;
     --text-color: #222;
-    --card-bg: #fff;
+    --card-bg: rgba(255, 255, 255, 0.7);
     --card-shadow: rgba(0,0,0,0.05);
+    --card-border: rgba(255, 255, 255, 0.4);
     --subtitle-color: #666;
     --link-color: #444;
 }
@@ -21,25 +25,47 @@
     :root {
         --bg-color: #121212;
         --text-color: #e0e0e0;
-        --card-bg: #1e1e1e;
+        --card-bg: rgba(30, 30, 30, 0.7);
         --card-shadow: rgba(0,0,0,0.4);
+        --card-border: rgba(255, 255, 255, 0.1);
         --subtitle-color: #aaa;
         --link-color: #bbb;
     }
+}
+html {
+    background-color: var(--bg-color);
 }
 body {
     font-family: 'Inter', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: var(--bg-color);
     color: var(--text-color);
+    position: relative;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+#vanta-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
 }
 header {
-    padding: 40px 20px;
+    padding: 12px 30px;
     text-align: center;
+    width: fit-content;
+    margin: 20px auto 0;
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px var(--card-shadow);
 }
-h1 { font-size: 2.4rem; margin-bottom: 0.2rem; }
-.subtitle { color: var(--subtitle-color); font-size: 1rem; }
+h1 { font-size: 1.8rem; margin: 0; }
+.subtitle { color: var(--subtitle-color); font-size: 0.9rem; margin-top: 2px; }
 .container {
     max-width: 900px;
     margin: 0 auto;
@@ -50,6 +76,9 @@ h1 { font-size: 2.4rem; margin-bottom: 0.2rem; }
 }
 .profile-card {
     background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
     padding: 20px;
     border-radius: 14px;
     box-shadow: 0 4px 20px var(--card-shadow);
@@ -60,6 +89,11 @@ h1 { font-size: 2.4rem; margin-bottom: 0.2rem; }
 }
 .profile-card .section {
     margin-bottom: 0;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    backdrop-filter: none;
+    padding: 0;
 }
 .profile-card img {
     width: 100%;
@@ -95,6 +129,9 @@ h1 { font-size: 2.4rem; margin-bottom: 0.2rem; }
 }
 .section {
     background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
     padding: 15px 25px 25px;
     border-radius: 14px;
     box-shadow: 0 4px 20px var(--card-shadow);
@@ -200,7 +237,6 @@ a { color: var(--link-color); text-decoration: none; }
 /* Globe Widget */
 .globe-section {
     position: relative;
-    overflow: hidden;
 }
 .globe-container {
     position: relative;
@@ -209,7 +245,7 @@ a { color: var(--link-color); text-decoration: none; }
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 10px 0 -15px 0;
+    margin: 10px 0 5px 0;
     border-radius: 10px;
     overflow: hidden;
 }
@@ -229,8 +265,6 @@ a { color: var(--link-color); text-decoration: none; }
     gap: 8px;
     justify-content: center;
     margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid var(--card-shadow);
 }
 .legend-item {
     display: flex;
@@ -254,18 +288,19 @@ a { color: var(--link-color); text-decoration: none; }
 /* Adventure Stats (now part of globe section) */
 .globe-section .stats-grid {
     display: flex;
-    gap: 6px;
-    justify-content: center;
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid var(--card-shadow);
+    gap: 8px;
+    margin-top: 15px;
+    width: 100%;
 }
 .globe-section .stat-card {
+    flex: 1;
+    min-width: 0;
     background: var(--card-bg);
     border-radius: 12px;
-    box-shadow: 0 4px 20px var(--card-shadow);
-    padding: 6px 8px;
+    box-shadow: 0 2px 8px var(--card-shadow);
+    padding: 6px 4px;
     text-align: center;
+    border: 1px solid var(--card-border);
 }
 .globe-section .stat-label {
     color: var(--subtitle-color);
@@ -315,26 +350,18 @@ a { color: var(--link-color); text-decoration: none; }
 /* Timeline */
 .timeline {
     position: relative;
-    padding-left: 32px;
-}
-.timeline::before {
-    content: '';
-    position: absolute;
-    left: 8px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: linear-gradient(to bottom, #ff6b6b, #a78bfa, #4ecdc4);
-    border-radius: 2px;
-    opacity: 0.4;
+    padding-left: 0;
 }
 .timeline-item {
     position: relative;
     margin-bottom: 16px;
-    padding: 12px 16px;
+    padding: 16px 20px;
     border-radius: 12px;
     background: var(--card-bg);
-    border: 1px solid transparent;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-left: 4px solid transparent; /* Unified border width for alignment */
     box-shadow: 0 2px 8px var(--card-shadow);
     transition: all 0.3s ease;
     cursor: pointer;
@@ -346,68 +373,42 @@ a { color: var(--link-color); text-decoration: none; }
 .timeline-item:last-child {
     margin-bottom: 0;
 }
-/* Dot - vertically centered on the line */
-.timeline-item::before {
-    content: '';
-    position: absolute;
-    left: -33px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 12px;
-    height: 12px;
-    background: var(--card-bg);
-    border: 3px solid var(--subtitle-color);
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    z-index: 1;
-}
-/* Outer glow ring */
-.timeline-item::after {
-    content: '';
-    position: absolute;
-    left: -37px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: transparent;
-    transition: all 0.3s ease;
-}
 .timeline-item:hover {
-    transform: translateX(4px);
-    box-shadow: 0 4px 16px var(--card-shadow);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px var(--card-shadow);
+    border-color: rgba(255, 255, 255, 0.3);
+    border-left-width: 4px; /* Maintain alignment on hover */
 }
-.timeline-item:hover::before {
-    transform: translateY(-50%) translateX(-4px) scale(1.2);
+/* Year Badge Approach */
+.timeline-year {
+    display: inline-block;
+    width: fit-content;
+    padding: 2px 10px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 20px;
+    font-size: 0.7rem;
+    color: var(--subtitle-color);
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid transparent;
+    text-align: left;
 }
-.timeline-item:hover::after {
-    transform: translateY(-50%) translateX(-4px);
+@media (prefers-color-scheme: dark) {
+    .timeline-year {
+        background: rgba(255, 255, 255, 0.05);
+    }
 }
 /* Current/Experience items */
 .timeline-item.current {
     background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 107, 107, 0.05));
-    border-color: rgba(255, 107, 107, 0.3);
-}
-.timeline-item.current::before {
-    border-color: #ff6b6b;
-    background: var(--card-bg);
-}
-.timeline-item.current:hover::before {
-    background: #ff6b6b;
-    box-shadow: 0 0 8px rgba(255, 107, 107, 0.5);
-}
-.timeline-item.current.expanded::before {
-    background: #ff6b6b;
-}
-@keyframes pulse {
-    0%, 100% { transform: translateY(-50%) scale(1); opacity: 1; }
-    50% { transform: translateY(-50%) scale(1.1); opacity: 0.7; }
+    border-color: rgba(255, 107, 107, 0.4);
+    border-left: 4px solid #ff6b6b;
 }
 .timeline-item.current .timeline-year {
-    color: #ff6b6b;
-    font-size: 0.8rem;
-    font-weight: 700;
+    background: #ff6b6b;
+    color: white;
 }
 .timeline-item.current .timeline-title {
     font-size: 1.15rem;
@@ -417,55 +418,47 @@ a { color: var(--link-color); text-decoration: none; }
 }
 /* Education items */
 .timeline-item.education {
-    border-color: rgba(78, 205, 196, 0.2);
+    border-left: 4px solid #4ecdc4;
+    background: linear-gradient(135deg, rgba(78, 205, 196, 0.1), rgba(78, 205, 196, 0.05));
+    border-color: rgba(78, 205, 196, 0.4);
 }
-.timeline-item.education::before {
-    border-color: #4ecdc4;
-    background: var(--card-bg);
-}
-.timeline-item.education:hover::before {
-    background: #4ecdc4;
-    box-shadow: 0 0 8px rgba(78, 205, 196, 0.5);
-}
-.timeline-item.education.expanded::before {
-    background: #4ecdc4;
+.timeline-item.education .timeline-year {
+    color: #4ecdc4;
+    border-color: rgba(78, 205, 196, 0.3);
 }
 /* Research items */
 .timeline-item.research {
-    border-color: rgba(167, 139, 250, 0.2);
+    border-left: 4px solid #a78bfa;
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.1), rgba(167, 139, 250, 0.05));
+    border-color: rgba(167, 139, 250, 0.4);
 }
-.timeline-item.research::before {
-    border-color: #a78bfa;
-    background: var(--card-bg);
-}
-.timeline-item.research:hover::before {
-    background: #a78bfa;
-    box-shadow: 0 0 8px rgba(167, 139, 250, 0.5);
-}
-.timeline-item.research.expanded::before {
-    background: #a78bfa;
+.timeline-item.research .timeline-year {
+    color: #a78bfa;
+    border-color: rgba(167, 139, 250, 0.3);
 }
 /* Expanded state highlight */
 .timeline-item.expanded {
     box-shadow: 0 4px 20px var(--card-shadow);
-}
-.timeline-year {
-    font-size: 0.7rem;
-    color: var(--subtitle-color);
-    font-weight: 600;
-    margin-bottom: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 .timeline-title {
     font-weight: 600;
     font-size: 0.95rem;
     margin-bottom: 4px;
     line-height: 1.3;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+.timeline-emoji {
+    font-size: 1.2rem;
+    flex-shrink: 0;
 }
 .timeline-org {
     color: var(--subtitle-color);
     font-size: 0.8rem;
+    text-align: left;
 }
 .timeline-details {
     color: var(--subtitle-color);
@@ -477,6 +470,7 @@ a { color: var(--link-color); text-decoration: none; }
     overflow: hidden;
     opacity: 0;
     transition: all 0.3s ease;
+    text-align: left;
 }
 .timeline-item.expanded .timeline-details {
     max-height: 300px;
@@ -488,20 +482,21 @@ a { color: var(--link-color); text-decoration: none; }
 /* Size variants based on importance */
 .timeline-item.large {
     min-height: 70px;
-    padding: 14px 18px;
+    padding: 16px 20px;
 }
 .timeline-item.large .timeline-title {
     font-size: 1.1rem;
 }
 .timeline-item.medium {
     min-height: 60px;
+    padding: 16px 20px;
 }
 .timeline-item.medium .timeline-title {
     font-size: 0.95rem;
 }
 .timeline-item.small {
     min-height: 50px;
-    padding: 10px 14px;
+    padding: 16px 20px;
     margin-bottom: 12px;
 }
 .timeline-item.small .timeline-title {
@@ -517,6 +512,7 @@ a { color: var(--link-color); text-decoration: none; }
 </style>
 </head>
 <body>
+<div id="vanta-bg"></div>
 <header>
     <h1 itemprop="name">Alex Bak</h1>
     <div class="subtitle">Toronto • Canada</div>
@@ -598,7 +594,7 @@ a { color: var(--link-color); text-decoration: none; }
     <div class="timeline" id="timeline">
         <div class="timeline-item current large expanded">
             <div class="timeline-year">Jul 2024 – Present</div>
-            <div class="timeline-title">🩺 Resident Physician, Anesthesiology</div>
+            <div class="timeline-title">Resident Physician, Anesthesiology <span class="timeline-emoji">🩺</span></div>
             <div class="timeline-org">University of Toronto</div>
             <div class="timeline-details">
                 • Board Representative, Canadian Anesthesiologists' Society Board of Directors<br>
@@ -608,31 +604,31 @@ a { color: var(--link-color); text-decoration: none; }
         </div>
         <div class="timeline-item research medium">
             <div class="timeline-year">Nov 2020 – Present</div>
-            <div class="timeline-title">🔬 AI Research Fellow</div>
+            <div class="timeline-title">AI Research Fellow <span class="timeline-emoji">🔬</span></div>
             <div class="timeline-org">University Health Network</div>
             <div class="timeline-details">Funding: AI Studentship, Temerty Centre for AI Research and Education in Medicine</div>
         </div>
         <div class="timeline-item education medium">
             <div class="timeline-year">2024</div>
-            <div class="timeline-title">🎓 MD in Medicine</div>
+            <div class="timeline-title">MD in Medicine <span class="timeline-emoji">🎓</span></div>
             <div class="timeline-org">University of Toronto</div>
             <div class="timeline-details">Temerty Faculty of Medicine</div>
         </div>
         <div class="timeline-item education small">
             <div class="timeline-year">2023</div>
-            <div class="timeline-title">🎓 MEng in Biomedical Engineering</div>
+            <div class="timeline-title">MEng in Biomedical Engineering <span class="timeline-emoji">🎓</span></div>
             <div class="timeline-org">University of Toronto</div>
             <div class="timeline-details">Focus on biomedical data science and machine learning</div>
         </div>
         <div class="timeline-item research small">
             <div class="timeline-year">Apr – Jun 2020</div>
-            <div class="timeline-title">🔬 Research Assistant</div>
+            <div class="timeline-title">Research Assistant <span class="timeline-emoji">🔬</span></div>
             <div class="timeline-org">Stanford University School of Medicine</div>
             <div class="timeline-details">3-month research position</div>
         </div>
         <div class="timeline-item research small">
             <div class="timeline-year">May 2019 – Apr 2020</div>
-            <div class="timeline-title">🔬 Research Intern, Stem Cell Biology</div>
+            <div class="timeline-title">Research Intern, Stem Cell Biology <span class="timeline-emoji">🔬</span></div>
             <div class="timeline-org">Johns Hopkins University School of Medicine</div>
             <div class="timeline-details">
                 Kennedy Krieger Institute & Johns Hopkins Hospital<br>
@@ -642,13 +638,13 @@ a { color: var(--link-color); text-decoration: none; }
         </div>
         <div class="timeline-item education small">
             <div class="timeline-year">2020</div>
-            <div class="timeline-title">🎓 BHSc (Honours) in Health Sciences</div>
+            <div class="timeline-title">BHSc (Honours) in Health Sciences <span class="timeline-emoji">🎓</span></div>
             <div class="timeline-org">McMaster University</div>
             <div class="timeline-details">Bachelor of Health Sciences with Honours</div>
         </div>
         <div class="timeline-item research small">
             <div class="timeline-year">Sep 2017 – May 2020</div>
-            <div class="timeline-title">🔬 R&D Lead, Virtual Reality Devices</div>
+            <div class="timeline-title">R&D Lead, Virtual Reality Devices <span class="timeline-emoji">🔬</span></div>
             <div class="timeline-org">McMaster University Department of Medicine</div>
             <div class="timeline-details">
                 • Created portable, affordable VR tool for anatomy education in low-resource settings<br>
@@ -674,21 +670,57 @@ a { color: var(--link-color); text-decoration: none; }
 </main>
 </div>
 
+<!-- Vanta.js Background -->
+<script src="https://unpkg.com/three@0.134.0/build/three.min.js"></script>
+<script src="https://unpkg.com/vanta@0.5.24/dist/vanta.cells.min.js"></script>
+
 <!-- Globe.gl Library -->
 <script src="https://unpkg.com/globe.gl@2.27.0/dist/globe.gl.min.js"></script>
 
 <script>
+// Global error logging
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+    console.error('Global Error: ' + msg + ' at ' + url + ':' + lineNo);
+    return false;
+};
+
 document.addEventListener('DOMContentLoaded', function() {
+    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    // ============================================
+    // VANTA.JS CELLS BACKGROUND
+    // ============================================
+    if (typeof VANTA !== 'undefined' && VANTA.CELLS) {
+        try {
+            var isDarkVanta = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            VANTA.CELLS({
+                el: "#vanta-bg",
+                mouseControls: true,
+                touchControls: true,
+                gyroControls: false,
+                minHeight: 200.00,
+                minWidth: 200.00,
+                scale: 1.00,
+                color1: 0x008c8c,
+                color2: 0xf2e735,
+                size: 1.50,
+                speed: 1.00
+            });
+        } catch (err) {
+            console.warn("Vanta background failed to initialize:", err);
+            var bgEl = document.getElementById('vanta-bg');
+            if (bgEl) bgEl.style.background = isDarkVanta ? '#121212' : '#fafafa';
+        }
+    }
+
     // ============================================
     // GLOBE.GL ADVANCED WIDGET
     // ============================================
-    const container = document.getElementById('globe-container');
+    var container = document.getElementById('globe-container');
     if (container) {
-        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var isDarkGlobe = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-        // ====== ADVENTURE DATA ======
-        // Countries to highlight (visited)
-        const visitedCountries = [
+        var visitedCountries = [
             { country: 'Canada', code: 'CAN', color: '#ffe66d', activity: 'home' },
             { country: 'Philippines', code: 'PHL', color: '#ff6b6b', activity: 'dived' },
             { country: 'Portugal', code: 'PRT', color: '#4ecdc4', activity: 'visited' },
@@ -698,361 +730,241 @@ document.addEventListener('DOMContentLoaded', function() {
             { country: 'Taiwan', code: 'TWN', color: '#4ecdc4', activity: 'visited' }
         ];
 
-        // Specific location markers with emojis
-        const adventureMarkers = [
-            {
-                name: 'Toronto',
-                lat: 43.6532,
-                lng: -79.3832,
-                emoji: '🏠',
-                activity: 'Home',
-                color: '#ffe66d'
-            },
-            {
-                name: 'Manila',
-                lat: 14.5995,
-                lng: 120.9842,
-                emoji: '🤿',
-                activity: 'Scuba diving in Philippines',
-                color: '#ff6b6b'
-            },
-            {
-                name: 'Porto',
-                lat: 41.1579,
-                lng: -8.6291,
-                emoji: '📍',
-                activity: 'Visited Porto',
-                color: '#4ecdc4'
-            },
-            {
-                name: 'Ho Chi Minh',
-                lat: 10.8231,
-                lng: 106.6297,
-                emoji: '📍',
-                activity: 'Visited Vietnam',
-                color: '#4ecdc4'
-            },
-            {
-                name: 'Seoul',
-                lat: 37.5665,
-                lng: 126.9780,
-                emoji: '📍',
-                activity: 'Visited South Korea',
-                color: '#4ecdc4'
-            },
-            {
-                name: 'California',
-                lat: 36.7783,
-                lng: -119.4179,
-                emoji: '📍',
-                activity: 'Visited California',
-                color: '#4ecdc4'
-            },
-            {
-                name: 'Taipei',
-                lat: 25.0330,
-                lng: 121.5654,
-                emoji: '📍',
-                activity: 'Visited Taiwan',
-                color: '#4ecdc4'
-            }
+        var adventureMarkers = [
+            { name: 'Toronto', lat: 43.6532, lng: -79.3832, emoji: '🏠', activity: 'Home', color: '#ffe66d' },
+            { name: 'Manila', lat: 14.5995, lng: 120.9842, emoji: '🤿', activity: 'Scuba diving in Philippines', color: '#ff6b6b' },
+            { name: 'Porto', lat: 41.1579, lng: -8.6291, emoji: '📍', activity: 'Visited Porto', color: '#4ecdc4' },
+            { name: 'Ho Chi Minh', lat: 10.8231, lng: 106.6297, emoji: '📍', activity: 'Visited Vietnam', color: '#4ecdc4' },
+            { name: 'Seoul', lat: 37.5665, lng: 126.9780, emoji: '📍', activity: 'Visited South Korea', color: '#4ecdc4' },
+            { name: 'California', lat: 36.7783, lng: -119.4179, emoji: '📍', activity: 'Visited California', color: '#4ecdc4' },
+            { name: 'Taipei', lat: 25.0330, lng: 121.5654, emoji: '📍', activity: 'Visited Taiwan', color: '#4ecdc4' }
         ];
 
-        // Create the globe
-        const globe = Globe()
-            .globeImageUrl(isDark
-                ? '//unpkg.com/three-globe/example/img/earth-dark.jpg'
-                : '//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
-            .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
-            .backgroundImageUrl(isDark
-                ? '//unpkg.com/three-globe/example/img/night-sky.png'
-                : null)
-            .backgroundColor(isDark ? '#1e1e1e' : '#fafafa')
-            .showAtmosphere(true)
-            .atmosphereColor(isDark ? '#4ecdc4' : '#3a86ff')
-            .atmosphereAltitude(0.15)
-            .width(container.offsetWidth)
-            .height(container.offsetHeight);
+        if (typeof Globe === 'function') {
+            try {
+                var globe = Globe()
+                    .globeImageUrl(isDarkGlobe
+                        ? 'https://unpkg.com/three-globe/example/img/earth-dark.jpg'
+                        : 'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+                    .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
+                    .backgroundImageUrl(isDarkGlobe
+                        ? 'https://unpkg.com/three-globe/example/img/night-sky.png'
+                        : null)
+                    .backgroundColor(isDarkGlobe ? '#1e1e1e' : '#fafafa')
+                    .showAtmosphere(true)
+                    .atmosphereColor(isDarkGlobe ? '#4ecdc4' : '#3a86ff')
+                    .atmosphereAltitude(0.15)
+                    .width(container.offsetWidth)
+                    .height(container.offsetHeight);
 
-        // Mount globe
-        globe(container);
+                globe(container);
 
-        // Auto-rotate
-        globe.controls().autoRotate = true;
-        globe.controls().autoRotateSpeed = 0.3;
-        globe.controls().enableZoom = true;
-        globe.controls().minDistance = 150;
-        globe.controls().maxDistance = 400;
+                if (globe.controls()) {
+                    globe.controls().autoRotate = true;
+                    globe.controls().autoRotateSpeed = 0.3;
+                    globe.controls().enableZoom = true;
+                    globe.controls().minDistance = 150;
+                    globe.controls().maxDistance = 400;
+                }
 
-        // ====== LOAD COUNTRY POLYGONS ======
-        fetch('https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson')
-            .then(res => res.json())
-            .then(countries => {
-                // Filter to only show visited countries
-                const visitedCodes = visitedCountries.map(c => c.code);
+                fetch('https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson')
+                    .then(function(res) { return res.json(); })
+                    .then(function(countries) {
+                        var visitedCodes = visitedCountries.map(function(c) { return c.code; });
+                        globe
+                            .polygonsData(countries.features.filter(function(d) {
+                                return visitedCodes.indexOf(d.properties.ISO_A3) !== -1;
+                            }))
+                            .polygonCapColor(function(feat) {
+                                var visited = visitedCountries.find(function(c) { return c.code === feat.properties.ISO_A3; });
+                                return visited ? visited.color + 'cc' : 'rgba(100,100,100,0.3)';
+                            })
+                            .polygonSideColor(function() { return 'rgba(100,100,100,0.1)'; })
+                            .polygonStrokeColor(function() { return '#fff'; })
+                            .polygonAltitude(0.01)
+                            .polygonLabel(function(feat) {
+                                var visited = visitedCountries.find(function(c) { return c.code === feat.properties.ISO_A3; });
+                                var activity = visited ? visited.activity : null;
+                                var color = visited ? visited.color : null;
+                                var emoji = activity === 'dived' ? '🤿' : (activity === 'home' ? '🏠' : '✈️');
+                                return '<div style="background:rgba(0,0,0,0.8);color:white;padding:8px 12px;border-radius:8px;font-size:12px;">' +
+                                       '<b>' + emoji + ' ' + feat.properties.NAME + '</b><br/>' +
+                                       '<span style="color:' + (color || '#ccc') + '">' + (activity || 'Visited') + '</span></div>';
+                            })
+                            .onPolygonClick(function(polygon, event, coords) {
+                                globe.pointOfView({ lat: coords.lat, lng: coords.lng, altitude: 1.5 }, 1000);
+                            })
+                            .onPolygonHover(function(polygon) {
+                                container.style.cursor = polygon ? 'pointer' : 'grab';
+                            });
+                    });
 
                 globe
-                    .polygonsData(countries.features.filter(d =>
-                        visitedCodes.includes(d.properties.ISO_A3)
-                    ))
-                    .polygonCapColor(feat => {
-                        const visited = visitedCountries.find(c => c.code === feat.properties.ISO_A3);
-                        return visited ? visited.color + 'cc' : 'rgba(100,100,100,0.3)';
+                    .htmlElementsData(adventureMarkers)
+                    .htmlElement(function(d) {
+                        var el = document.createElement('div');
+                        el.style.cssText = 'position: relative; pointer-events: auto;';
+                        el.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;cursor:pointer;position:absolute;left:50%;top:50%;transform:translate(-50%,-100%);">' +
+                                       '<span style="font-size:20px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));transition:transform 0.2s;" class="marker-emoji">' + d.emoji + '</span>' +
+                                       '<span style="background:rgba(0,0,0,0.7);color:white;padding:2px 6px;border-radius:4px;font-size:8px;margin-top:1px;white-space:nowrap;">' + d.name + '</span></div>';
+
+                        el.onmouseenter = function() {
+                            var markerEmoji = el.querySelector('.marker-emoji');
+                            if (markerEmoji) markerEmoji.style.transform = 'scale(1.3)';
+                        };
+                        el.onmouseleave = function() {
+                            var markerEmoji = el.querySelector('.marker-emoji');
+                            if (markerEmoji) markerEmoji.style.transform = 'scale(1)';
+                        };
+                        el.onclick = function(event) {
+                            globe.pointOfView({ lat: d.lat, lng: d.lng, altitude: 1.2 }, 1000);
+                            showTooltip(d.activity, event);
+                        };
+                        return el;
                     })
-                    .polygonSideColor(() => 'rgba(100,100,100,0.1)')
-                    .polygonStrokeColor(() => '#fff')
-                    .polygonAltitude(0.01)
-                    .polygonLabel(feat => {
-                        const visited = visitedCountries.find(c => c.code === feat.properties.ISO_A3);
-                        const emoji = visited?.activity === 'dived' ? '🤿' :
-                                      visited?.activity === 'home' ? '🏠' : '✈️';
-                        return `
-                            <div style="
-                                background: rgba(0,0,0,0.8);
-                                color: white;
-                                padding: 8px 12px;
-                                border-radius: 8px;
-                                font-size: 12px;
-                            ">
-                                <b>${emoji} ${feat.properties.NAME}</b><br/>
-                                <span style="color: ${visited?.color}">${visited?.activity || 'Visited'}</span>
-                            </div>
-                        `;
-                    })
-                    .onPolygonClick((polygon, event, coords) => {
-                        // Zoom to clicked country
-                        globe.pointOfView({
-                            lat: coords.lat,
-                            lng: coords.lng,
-                            altitude: 1.5
-                        }, 1000);
-                    })
-                    .onPolygonHover(polygon => {
-                        container.style.cursor = polygon ? 'pointer' : 'grab';
-                    });
-            });
+                    .htmlLat(function(d) { return d.lat; })
+                    .htmlLng(function(d) { return d.lng; })
+                    .htmlAltitude(0.01);
 
-        // ====== ADD EMOJI MARKERS ======
-        globe
-            .htmlElementsData(adventureMarkers)
-            .htmlElement(d => {
-                const el = document.createElement('div');
-                el.style.cssText = 'position: relative; pointer-events: auto;';
-                el.innerHTML = `
-                    <div style="
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        cursor: pointer;
-                        position: absolute;
-                        left: 50%;
-                        top: 50%;
-                        transform: translate(-50%, -100%);
-                    ">
-                        <span style="
-                            font-size: 20px;
-                            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
-                            transition: transform 0.2s;
-                        " class="marker-emoji">${d.emoji}</span>
-                        <span style="
-                            background: rgba(0,0,0,0.7);
-                            color: white;
-                            padding: 2px 6px;
-                            border-radius: 4px;
-                            font-size: 8px;
-                            margin-top: 1px;
-                            white-space: nowrap;
-                        ">${d.name}</span>
-                    </div>
-                `;
+                function showTooltip(text, event) {
+                    var existing = document.querySelector('.globe-tooltip');
+                    if (existing) existing.parentNode.removeChild(existing);
+                    var tooltip = document.createElement('div');
+                    tooltip.className = 'globe-tooltip';
+                    tooltip.textContent = text;
+                    tooltip.style.left = event.clientX + 'px';
+                    tooltip.style.top = (event.clientY - 40) + 'px';
+                    document.body.appendChild(tooltip);
+                    setTimeout(function() { if (tooltip.parentNode) tooltip.parentNode.removeChild(tooltip); }, 2000);
+                }
 
-                // Hover effect
-                el.onmouseenter = () => {
-                    el.querySelector('.marker-emoji').style.transform = 'scale(1.3)';
-                };
-                el.onmouseleave = () => {
-                    el.querySelector('.marker-emoji').style.transform = 'scale(1)';
-                };
+                window.addEventListener('resize', function() {
+                    globe.width(container.offsetWidth);
+                    globe.height(container.offsetHeight);
+                });
 
-                // Click to zoom
-                el.onclick = (event) => {
-                    globe.pointOfView({
-                        lat: d.lat,
-                        lng: d.lng,
-                        altitude: 1.2
-                    }, 1000);
-
-                    // Show activity tooltip
-                    showTooltip(d.activity, event);
-                };
-
-                return el;
-            })
-            .htmlLat(d => d.lat)
-            .htmlLng(d => d.lng)
-            .htmlAltitude(0.01);
-
-        // ====== TOOLTIP FUNCTION ======
-        function showTooltip(text, event) {
-            // Remove existing tooltip
-            const existing = document.querySelector('.globe-tooltip');
-            if (existing) existing.remove();
-
-            const tooltip = document.createElement('div');
-            tooltip.className = 'globe-tooltip';
-            tooltip.textContent = text;
-            tooltip.style.left = event.clientX + 'px';
-            tooltip.style.top = (event.clientY - 40) + 'px';
-            document.body.appendChild(tooltip);
-
-            setTimeout(() => tooltip.remove(), 2000);
+                setTimeout(function() {
+                    globe.pointOfView({ lat: 30, lng: 100, altitude: 2.5 }, 2000);
+                }, 500);
+            } catch (err) {
+                console.warn("Globe.gl failed to initialize:", err);
+                container.innerHTML = '<p style="text-align:center;padding:20px;font-size:0.9rem;color:var(--subtitle-color);">Interactive globe unavailable on this device.</p>';
+            }
         }
-
-        // ====== HANDLE RESIZE ======
-        window.addEventListener('resize', () => {
-            globe.width(container.offsetWidth);
-            globe.height(container.offsetHeight);
-        });
-
-        // ====== INITIAL VIEW ======
-        // Start with a nice view showing the markers
-        setTimeout(() => {
-            globe.pointOfView({ lat: 30, lng: 100, altitude: 2.5 }, 2000);
-        }, 500);
     }
 
     // ============================================
-    // COUNTER ANIMATIONS (with easing & scroll trigger)
+    // COUNTER ANIMATIONS
     // ============================================
-    function animateCounter(id, target, duration = 2000) {
-        const el = document.getElementById(id);
+    function animateCounter(id, target, duration) {
+        if (!duration) duration = 2000;
+        var el = document.getElementById(id);
         if (!el) return;
-
-        const startTime = performance.now();
-
-        // Very gentle ease-out: 60% complete at halfway point
-        function easeOutGentle(t) {
-            return Math.pow(t, 0.74);
-        }
-
+        var startTime = performance.now();
+        function easeOutGentle(t) { return Math.pow(t, 0.74); }
         function update(currentTime) {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const easedProgress = easeOutGentle(progress);
-            const currentValue = Math.floor(easedProgress * target);
-
+            var elapsed = currentTime - startTime;
+            var progress = Math.min(elapsed / duration, 1);
+            var easedProgress = easeOutGentle(progress);
+            var currentValue = Math.floor(easedProgress * target);
             el.textContent = currentValue;
-
             if (progress < 1) {
                 requestAnimationFrame(update);
             } else {
                 el.textContent = target;
             }
         }
-
         requestAnimationFrame(update);
     }
 
-    // Trigger counters when stats section scrolls into view
-    const statsSection = document.querySelector('.globe-section');
-    let countersStarted = false;
-
+    var statsSection = document.querySelector('.globe-section');
+    var countersStarted = false;
     function startCounters() {
         if (countersStarted) return;
         countersStarted = true;
-        // All counters start and end together
         animateCounter('countries-counter', 21, 2000);
         animateCounter('ski-counter', 25, 2000);
         animateCounter('dives-counter', 65, 2000);
     }
 
     if (statsSection) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    startCounters();
-                    observer.disconnect(); // Stop observing after triggered
-                }
-            });
-        }, {
-            threshold: 0.5,      // 50% of element must be visible
-            rootMargin: '0px'    // No margin - must actually be in viewport
-        });
-
-        // Delay observer setup to avoid immediate trigger on page load
-        requestAnimationFrame(() => {
-            observer.observe(statsSection);
-        });
+        if (window.IntersectionObserver) {
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        startCounters();
+                        observer.disconnect();
+                    }
+                });
+            }, { threshold: 0.5, rootMargin: '0px' });
+            requestAnimationFrame(function() { observer.observe(statsSection); });
+        } else {
+            startCounters();
+        }
     }
 
     // ============================================
     // TIMELINE ACCORDION
     // ============================================
-    const timeline = document.getElementById('timeline');
+    var timeline = document.getElementById('timeline');
     if (timeline) {
-        const items = timeline.querySelectorAll('.timeline-item');
-        items.forEach(item => {
-            item.addEventListener('click', () => {
-                // If clicking the already expanded item, just collapse it
-                if (item.classList.contains('expanded')) {
-                    item.classList.remove('expanded');
-                    return;
-                }
-                // Collapse all items
-                items.forEach(i => i.classList.remove('expanded'));
-                // Expand clicked item
-                item.classList.add('expanded');
-            });
-        });
+        var items = timeline.querySelectorAll('.timeline-item');
+        for (var k = 0; k < items.length; k++) {
+            (function(item) {
+                item.addEventListener('click', function() {
+                    if (item.classList.contains('expanded')) {
+                        item.classList.remove('expanded');
+                        return;
+                    }
+                    for (var m = 0; k < items.length; m++) { if (items[m]) items[m].classList.remove('expanded'); }
+                    item.classList.add('expanded');
+                });
+            })(items[k]);
+        }
     }
 
-// News Articles & Auto Thumbnail
-const newsArticles = [
-  {title:'Researchers find that race matters in recovery after cancer surgery', url:'https://www.uhnresearch.ca/news/race-matters-recovery'},
-  {title:'Toronto entrepreneurs win medtech pitch competition', url:'https://www.ideation.clinic/news/challenge-winner-specifix'},
-  {title:'Anesthesia Resident Receives Two Awards at International Meeting', url:'https://anesthesia.utoronto.ca/news/anesthesia-resident-receives-two-awards-society-neuroscience-anesthesiology-and-critical-care'}
-];
+    // ============================================
+    // NEWS ARTICLES
+    // ============================================
+    var newsArticles = [
+      {title:'Researchers find that race matters in recovery after cancer surgery', url:'https://www.uhnresearch.ca/news/race-matters-recovery'},
+      {title:'Toronto entrepreneurs win medtech pitch competition', url:'https://www.ideation.clinic/news/challenge-winner-specifix'},
+      {title:'Anesthesia Resident Receives Two Awards at International Meeting', url:'https://anesthesia.utoronto.ca/news/anesthesia-resident-receives-two-awards-society-neuroscience-anesthesiology-and-critical-care'}
+    ];
+    var API_KEY = '9a71cb507a453d96a0e0c017e1f7ec00';
 
-const API_KEY = '9a71cb507a453d96a0e0c017e1f7ec00';
-
-async function fetchPreview(url) {
-  try {
-    const res = await fetch(`https://api.linkpreview.net/?key=${API_KEY}&q=${encodeURIComponent(url)}`);
-    const data = await res.json();
-    return data;
-  } catch(e) {
-    console.error('Error fetching preview for', url, e);
-    return null;
-  }
-}
-
-async function renderNews() {
-  const container = document.getElementById('news-grid');
-  for (let article of newsArticles) {
-    const preview = await fetchPreview(article.url);
-    if(preview && preview.image) {
-      const div = document.createElement('div');
-      div.className = 'news-card';
-      div.innerHTML = `
-        <a href="${preview.url}" target="_blank" rel="noopener">
-          <img src="${preview.image}" alt="${preview.title}">
-          <p>${preview.title}</p>
-        </a>
-      `;
-      container.appendChild(div);
+    function renderNews() {
+      var newsContainer = document.getElementById('news-grid');
+      if (!newsContainer) return;
+      
+      for (var n = 0; n < newsArticles.length; n++) {
+        (function(article) {
+          fetch('https://api.linkpreview.net/?key=' + API_KEY + '&q=' + encodeURIComponent(article.url))
+            .then(function(res) { return res.json(); })
+            .then(function(preview) {
+              if(preview && preview.image) {
+                var div = document.createElement('div');
+                div.className = 'news-card';
+                div.innerHTML = '<a href="' + preview.url + '" target="_blank" rel="noopener">' +
+                                '<img src="' + preview.image + '" alt="' + preview.title + '">' +
+                                '<p>' + preview.title + '</p></a>';
+                newsContainer.appendChild(div);
+              }
+            })
+            .catch(function(e) { console.error('Error fetching preview:', e); });
+        })(newsArticles[n]);
+      }
     }
-  }
-}
-
     renderNews();
 
     // ============================================
-    // PUBLICATIONS (OpenAlex with ORCID)
+    // PUBLICATIONS
     // ============================================
     function updateShowMoreButton() {
-        const pubList = document.getElementById("pub-list");
-        const showMoreContainer = document.getElementById("show-more-container");
-        const entries = pubList.querySelectorAll('.pub-entry');
+        var pubList = document.getElementById("pub-list");
+        var showMoreContainer = document.getElementById("show-more-container");
+        if (!pubList || !showMoreContainer) return;
+        var entries = pubList.querySelectorAll('.pub-entry');
         if (entries.length > 10) {
             showMoreContainer.style.display = "block";
         } else {
@@ -1060,120 +972,95 @@ async function renderNews() {
         }
     }
 
-    async function loadPublications(forceRefresh=false){
-        const cacheKey="pub_cache_html_v7";
-        const cacheTimeKey="pub_cache_time_v7";
-        const maxAge=1000*60*60*24; // Cache for 24 hours
-        const orcid = "0000-0003-4482-4792";
+    function loadPublications(forceRefresh) {
+        if (forceRefresh === undefined) forceRefresh = false;
+        var cacheKey = "pub_cache_html_v7";
+        var cacheTimeKey = "pub_cache_time_v7";
+        var orcid = "0000-0003-4482-4792";
+        var pubListEl = document.getElementById("pub-list");
+        if (!pubListEl) return;
+
+        var now = Date.now();
+        var cached = localStorage.getItem(cacheKey);
+        var cachedTime = parseInt(localStorage.getItem(cacheTimeKey) || "0", 10);
         
-        try{
-            const now=Date.now();
-            const cached=localStorage.getItem(cacheKey);
-            const cachedTime=parseInt(localStorage.getItem(cacheTimeKey)||"0",10);
-            
-            if(!forceRefresh && cached && cachedTime && now-cachedTime<maxAge){
-                document.getElementById("pub-list").innerHTML=cached;
-                document.getElementById("last-updated-time").innerText=new Date(cachedTime).toLocaleString();
-                updateShowMoreButton();
-                return;
-            }
-
-            // OpenAlex API is much more comprehensive than PubMed for interdisciplinary work
-            const url = `https://api.openalex.org/works?filter=author.orcid:https://orcid.org/${orcid}&sort=publication_year:desc,publication_date:desc&per_page=100`;
-            const res = await fetch(url);
-            const data = await res.json();
-            const works = data.results || [];
-
-            if(!works.length){
-                const noHtml='<p>No publications found.</p>';
-                document.getElementById("pub-list").innerHTML=noHtml;
-                localStorage.setItem(cacheKey,noHtml);
-                localStorage.setItem(cacheTimeKey,Date.now().toString());
-                document.getElementById("last-updated-time").innerText=new Date().toLocaleString();
-                updateShowMoreButton();
-                return;
-            }
-
-            let html='';
-            let counter=1;
-            
-            for(const work of works){
-                // Skip "works" that are likely just collections of abstracts or front matter
-                const type = work.type?.toLowerCase();
-                if(type === 'paratext' || type === 'frontmatter') continue;
-                
-                // To keep only "full publications" like PubMed, we filter for works that have a PubMed ID
-                // Conference abstracts and proceedings usually don't have a PMID in OpenAlex unless they are full papers
-                if (!work.ids?.pmid) continue;
-
-                // Format authors
-                let authors = (work.authorships || []).map(a => a.author.display_name);
-                if(authors.length > 3){
-                    authors = authors.slice(0, 3).join(', ') + ', et al.';
-                } else {
-                    authors = authors.join(', ');
-                }
-
-                let title = work.title || 'Untitled';
-                
-                // Truncate mega-abstracts / conference proceeding entries (fallback safety)
-                if (title.length > 500 || title.includes('Abstract ID') || title.includes('CPSS-')) {
-                    if (title.includes('Abstract ID')) {
-                        const parts = title.split(/Abstract ID \d+/);
-                        if (parts[0].length > 10) {
-                            title = parts[0].trim().replace(/\.+$/, '') + ' (Conference Proceedings)';
-                        }
-                    } else if (title.length > 300) {
-                        title = title.substring(0, 300) + '... (Proceedings)';
-                    }
-                }
-
-                const year = work.publication_year || '';
-                const journal = work.primary_location?.source?.display_name || '';
-                const doi = work.doi || null;
-                const pmid = work.ids?.pmid || null;
-                // Use PMID link if available (user preference for PubMed style), else DOI
-                const entryLink = pmid || doi || work.id;
-
-                const content = `${counter}. ${escapeHtml(authors)}. <strong>${escapeHtml(title)}</strong>. <em>${escapeHtml(journal)}</em>${year?'. '+escapeHtml(year)+'.':''}`;
-                
-                if (entryLink) {
-                    html+=`<a href="${entryLink}" target="_blank" rel="noopener" class="pub-entry">${content}</a>`;
-                } else {
-                    html+=`<p class="pub-entry">${content}</p>`;
-                }
-                counter++;
-            }
-
-            document.getElementById("pub-list").innerHTML=html;
+        if (!forceRefresh && cached && cachedTime && (now - cachedTime < 86400000)) {
+            pubListEl.innerHTML = cached;
+            var timeEl = document.getElementById("last-updated-time");
+            if (timeEl) timeEl.innerText = new Date(cachedTime).toLocaleString();
             updateShowMoreButton();
-
-            localStorage.setItem(cacheKey,html);
-            localStorage.setItem(cacheTimeKey,Date.now().toString());
-            document.getElementById("last-updated-time").innerText=new Date().toLocaleString();
-        }catch(err){
-            console.error('Error loading publications:',err);
-            document.getElementById("pub-list").innerText="Error loading publications.";
+            return;
         }
+
+        pubListEl.innerHTML = '<div style="padding:20px; text-align:center;">Updating publications...</div>';
+
+        fetch('https://api.openalex.org/works?filter=author.orcid:https://orcid.org/' + orcid + '&sort=publication_year:desc,publication_date:desc&per_page=100&_cb=' + now)
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                var works = data.results || [];
+                if (!works.length) {
+                    pubListEl.innerHTML = '<p>No publications found.</p>';
+                    return;
+                }
+
+                var html = '';
+                var counter = 1;
+                for (var i = 0; i < works.length; i++) {
+                    var work = works[i];
+                    var type = (work.type || '').toLowerCase();
+                    if (type === 'paratext' || type === 'frontmatter') continue;
+                    var pmidId = (work.ids && work.ids.pmid) ? work.ids.pmid : null;
+                    if (!pmidId) continue;
+
+                    var authorsArr = (work.authorships || []).map(function(a) {
+                        return (a.author && a.author.display_name) ? a.author.display_name : 'Unknown Author';
+                    });
+                    var authorsStr = authorsArr.length > 3 ? authorsArr.slice(0, 3).join(', ') + ', et al.' : authorsArr.join(', ');
+                    var title = work.title || 'Untitled';
+                    
+                    var year = work.publication_year || '';
+                    var journal = (work.primary_location && work.primary_location.source && work.primary_location.source.display_name) ? work.primary_location.source.display_name : '';
+                    var doi = work.doi || null;
+                    var entryLink = pmidId || doi || work.id;
+                    var content = counter + '. ' + authorsStr + '. <strong>' + title + '</strong>. <em>' + journal + '</em>' + (year ? '. ' + year + '.' : '');
+                    
+                    html += '<a href="' + entryLink + '" target="_blank" rel="noopener" class="pub-entry">' + content + '</a>';
+                    counter++;
+                }
+
+                pubListEl.innerHTML = html;
+                updateShowMoreButton();
+                localStorage.setItem(cacheKey, html);
+                localStorage.setItem(cacheTimeKey, now.toString());
+                var finalUpdateEl = document.getElementById("last-updated-time");
+                if (finalUpdateEl) finalUpdateEl.innerText = new Date().toLocaleString();
+            })
+            .catch(function(err) {
+                console.error('Error loading publications:', err);
+                pubListEl.innerText = "Error loading publications.";
+            });
     }
 
-function escapeHtml(str){if(!str)return'';return String(str).replace(/[&<>\"'`]/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":"&#39;",'`':'&#96;'})[s]);}
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>\"'`]/g, function(s) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '`': '&#96;' }[s];
+        });
+    }
 
-    document.getElementById('refresh-btn').addEventListener('click',()=>{loadPublications(true);});
+    var refreshBtn = document.getElementById('refresh-btn');
+    if (refreshBtn) refreshBtn.addEventListener('click', function() { loadPublications(true); });
     
-    // Show More Publications Toggle
-    const showMoreBtn = document.getElementById('show-more-btn');
-    const pubList = document.getElementById('pub-list');
-    if (showMoreBtn && pubList) {
-        showMoreBtn.addEventListener('click', () => {
-            const isCollapsed = pubList.classList.contains('collapsed');
-            if (isCollapsed) {
+    var showMoreBtn = document.getElementById('show-more-btn');
+    if (showMoreBtn) {
+        showMoreBtn.addEventListener('click', function() {
+            var pubList = document.getElementById('pub-list');
+            if (pubList.classList.contains('collapsed')) {
                 pubList.classList.remove('collapsed');
                 showMoreBtn.textContent = 'Show Less';
             } else {
                 pubList.classList.add('collapsed');
                 showMoreBtn.textContent = 'Show More';
-                // Scroll back to publications header if showing less
                 document.getElementById('publications').scrollIntoView({ behavior: 'smooth' });
             }
         });
@@ -1181,14 +1068,12 @@ function escapeHtml(str){if(!str)return'';return String(str).replace(/[&<>\"'`]/
 
     loadPublications();
 
-    // Email Obfuscation
-    const contactLink = document.getElementById('contact-link');
+    var contactLink = document.getElementById('contact-link');
     if (contactLink) {
         contactLink.addEventListener('click', function(e) {
             e.preventDefault();
-            const u = 'alex.bak';
-            const d = 'mail.utoronto.ca';
-            window.location.href = `mailto:${u}@${d}`;
+            var u = 'alex.bak', d = 'mail.utoronto.ca';
+            window.location.href = 'mailto:' + u + '@' + d;
         });
     }
 });
