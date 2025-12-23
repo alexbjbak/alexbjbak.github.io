@@ -577,7 +577,7 @@ a { color: var(--link-color); text-decoration: none; }
 <main>
 <section class="section" itemprop="description">
     <h2>Bio</h2>
-    <p>Alex Bak is a physician, researcher, and digital health innovator with a focus on improving care for people living with chronic pain, disability, and those undergoing surgery. His work sits at the intersection of pain, mood, evaluation, and biomedical data science.
+    <p>Alex Bak is a physician, researcher, and digital health innovator with a focus on improving care for people living with chronic pain, disability, and those undergoing surgery. His work lies at the intersection of pain, mood, evaluation, and biomedical data science.
         His research uses advanced modelling on large-scale data to understand how these conditions and novel therapies shape long-term health.</p>
     <p>
         Alex has received broad international recognition for his academic contributions, delivering over 25 podium presentations at premier scientific meetings worldwide. His work has earned several distinctions, including back-to-back Best Papers Awards at the North American Spine Society meetings (2022, 2023) and a finalist placement for the Canadian Orthopaedic Association's Founder's Medal. His work has been further highlighted by honours such as the Anesthesia Patient Safety Foundation Award and the Canadian Anesthesiologists' Society Abstract Award.
@@ -598,7 +598,7 @@ a { color: var(--link-color); text-decoration: none; }
             <div class="timeline-details">
                 • Board Representative, Canadian Anesthesiologists' Society Board of Directors<br>
                 • Co-chair, Canadian Anesthesiologists' Society Resident Section<br>
-                • Clinical Practice Guidelines Committee
+                • Canadian Anesthesiologists' Society Clinical Practice Guidelines Committee
             </div>
         </div>
         <div class="timeline-item research medium">
@@ -611,7 +611,10 @@ a { color: var(--link-color); text-decoration: none; }
             <div class="timeline-year">2024</div>
             <div class="timeline-title">MD in Medicine <span class="timeline-emoji">🎓</span></div>
             <div class="timeline-org">University of Toronto</div>
-            <div class="timeline-details">Temerty Faculty of Medicine</div>
+            <div class="timeline-details">
+                • Founder, Temerty Alpine (Ski and Snowboard) Club<br>
+                • Computing for Medicine Certificate, Department of Computer Science
+            </div>
         </div>
         <div class="timeline-item education small">
             <div class="timeline-year">2023</div>
@@ -619,27 +622,15 @@ a { color: var(--link-color); text-decoration: none; }
             <div class="timeline-org">University of Toronto</div>
             <div class="timeline-details">Focus on biomedical data science and machine learning</div>
         </div>
-        <div class="timeline-item research small">
-            <div class="timeline-year">Apr – Jun 2020</div>
-            <div class="timeline-title">Research Assistant <span class="timeline-emoji">🔬</span></div>
-            <div class="timeline-org">Stanford University School of Medicine</div>
-            <div class="timeline-details">3-month research position</div>
-        </div>
-        <div class="timeline-item research small">
-            <div class="timeline-year">May 2019 – Apr 2020</div>
-            <div class="timeline-title">Research Intern, Stem Cell Biology <span class="timeline-emoji">🔬</span></div>
-            <div class="timeline-org">Johns Hopkins University School of Medicine</div>
-            <div class="timeline-details">
-                Kennedy Krieger Institute & Johns Hopkins Hospital<br>
-                Dept. of Neurology and Neurosurgery<br>
-                Funding: T. Russell Wilkins Memorial Scholarship, Global Experience Award
-            </div>
-        </div>
         <div class="timeline-item education small">
             <div class="timeline-year">2020</div>
             <div class="timeline-title">BHSc (Honours) in Health Sciences <span class="timeline-emoji">🎓</span></div>
             <div class="timeline-org">McMaster University</div>
-            <div class="timeline-details">Bachelor of Health Sciences with Honours</div>
+            <div class="timeline-details">
+                Bachelor of Health Sciences (Honours) Program<br>
+                • summa cum laude<br>
+                • Grand Challenges Scholar, National Academy of Engineering
+                </div>
         </div>
         <div class="timeline-item research small">
             <div class="timeline-year">Sep 2017 – May 2020</div>
@@ -647,8 +638,7 @@ a { color: var(--link-color); text-decoration: none; }
             <div class="timeline-org">McMaster University Department of Medicine</div>
             <div class="timeline-details">
                 • Created portable, affordable VR tool for anatomy education in low-resource settings<br>
-                • Led technology validation with randomized, double-blind controlled trial<br>
-                • Published in peer-reviewed anatomy education journal
+                • Led technology validation with randomized, double-blind controlled trial
             </div>
         </div>
     </div>
@@ -916,15 +906,34 @@ document.addEventListener('DOMContentLoaded', function() {
     if (container) {
         var isDarkGlobe = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-        var visitedCountries = [
-            { country: 'Canada', code: 'CAN', color: '#ffe66d', activity: 'home' },
-            { country: 'Philippines', code: 'PHL', color: '#ff6b6b', activity: 'dived' },
-            { country: 'Portugal', code: 'PRT', color: '#4ecdc4', activity: 'visited' },
-            { country: 'Vietnam', code: 'VNM', color: '#4ecdc4', activity: 'visited' },
-            { country: 'South Korea', code: 'KOR', color: '#4ecdc4', activity: 'visited' },
-            { country: 'United States', code: 'USA', color: '#4ecdc4', activity: 'visited' },
-            { country: 'Taiwan', code: 'TWN', color: '#4ecdc4', activity: 'visited' }
-        ];
+        // ====== ADVENTURE DATA ======
+        // Countries to highlight (visited)
+       const visitedCountries = [
+              { country: 'Canada', code: 'CAN', color: '#ffe66d', activity: 'home' },
+            
+              // Dived
+              { country: 'Philippines', code: 'PHL', color: '#ff6b6b', activity: 'dived' },
+              { country: 'Malaysia', code: 'MYS', color: '#ff6b6b', activity: 'dived' }, // Malaysian Borneo
+              { country: 'Thailand', code: 'THA', color: '#ff6b6b', activity: 'dived' },
+              { country: 'Indonesia', code: 'IDN', color: '#ff6b6b', activity: 'dived' },
+            
+              // Visited
+              { country: 'Portugal', code: 'PRT', color: '#4ecdc4', activity: 'visited' },
+              { country: 'Vietnam', code: 'VNM', color: '#4ecdc4', activity: 'visited' },
+              { country: 'South Korea', code: 'KOR', color: '#4ecdc4', activity: 'visited' },
+              { country: 'United States', code: 'USA', color: '#4ecdc4', activity: 'visited' },
+              { country: 'Taiwan', code: 'TWN', color: '#4ecdc4', activity: 'visited' },
+              { country: 'Colombia', code: 'COL', color: '#4ecdc4', activity: 'visited' },
+              { country: 'Costa Rica', code: 'CRI', color: '#4ecdc4', activity: 'visited' },
+              { country: 'France', code: 'FRA', color: '#4ecdc4', activity: 'visited' },
+              { country: 'Iceland', code: 'ISL', color: '#4ecdc4', activity: 'visited' },
+              { country: 'Japan', code: 'JPN', color: '#4ecdc4', activity: 'visited' },
+              { country: 'North Korea', code: 'PRK', color: '#4ecdc4', activity: 'visited' },
+              { country: 'Peru', code: 'PER', color: '#4ecdc4', activity: 'visited' },
+              { country: 'Singapore', code: 'SGP', color: '#4ecdc4', activity: 'visited' },
+              { country: 'Switzerland', code: 'CHE', color: '#4ecdc4', activity: 'visited' },
+              { country: 'United Kingdom', code: 'GBR', color: '#4ecdc4', activity: 'visited' }
+            ];
 
         var adventureMarkers = [
             { name: 'Toronto', lat: 43.6532, lng: -79.3832, emoji: '🏠', activity: 'Home', color: '#ffe66d' },
