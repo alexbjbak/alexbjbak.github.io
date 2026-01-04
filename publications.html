@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publications | Alex Bak</title>
+<style>
+:root {
+    --bg-color: #fafafa;
+    --text-color: #222;
+    --card-bg: rgba(255, 255, 255, 0.7);
+    --card-shadow: rgba(0,0,0,0.05);
+    --card-border: rgba(255, 255, 255, 0.4);
+    --subtitle-color: #666;
+    --link-color: #444;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #121212;
+        --text-color: #e0e0e0;
+        --card-bg: rgba(30, 30, 30, 0.7);
+        --card-shadow: rgba(0,0,0,0.4);
+        --card-border: rgba(255, 255, 255, 0.1);
+        --subtitle-color: #aaa;
+        --link-color: #bbb;
+    }
+}
+html {
+    background-color: var(--bg-color);
+}
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+    position: relative;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+#vanta-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+header {
+    padding: 12px 30px;
+    text-align: center;
+    width: fit-content;
+    margin: 20px auto 30px;
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px var(--card-shadow);
+}
+h1 { font-size: 1.8rem; margin: 0; }
+.subtitle { color: var(--subtitle-color); font-size: 0.9rem; margin-top: 2px; }
+
+.main-nav {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+.nav-link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--subtitle-color);
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+.nav-link:hover {
+    color: var(--text-color);
+    background: rgba(0, 0, 0, 0.05);
+}
+.nav-link.active {
+    color: var(--text-color);
+    background: rgba(0, 0, 0, 0.05);
+}
+@media (prefers-color-scheme: dark) {
+    .nav-link:hover, .nav-link.active {
+        background: rgba(255, 255, 255, 0.1);
+    }
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.section {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 4px 20px var(--card-shadow);
+    margin-bottom: 20px;
+}
+.section h2 { font-size: 1.5rem; margin-top: 0; margin-bottom: 20px; }
+
+#pub-list .pub-entry-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 10px;
+    transition: background-color 0.2s ease;
+    border: 1px solid transparent;
+}
+#pub-list .pub-entry-container:hover {
+    background-color: rgba(102, 126, 234, 0.08);
+    border-color: var(--card-border);
+}
+#pub-list .pub-entry-container a.pub-entry {
+    flex-grow: 1;
+    line-height: 1.5;
+    font-size: 1rem;
+    color: var(--text-color);
+    text-decoration: none;
+    cursor: pointer;
+}
+#pub-list .pub-entry-container strong {
+    color: inherit;
+    transition: color 0.2s ease;
+}
+#pub-list .pub-entry-container:hover strong {
+    color: #667eea;
+}
+
+#pub-controls { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    color: var(--subtitle-color);
+}
+#refresh-btn {
+    padding: 8px 16px; 
+    border-radius: 8px; 
+    border: 1px solid var(--card-border);
+    background: var(--card-bg); 
+    cursor: pointer; 
+    color: var(--text-color);
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+#refresh-btn:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+/* Modal Styles - Shared with index.html */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 20000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.modal-content {
+    background: rgba(25, 25, 25, 0.65);
+    backdrop-filter: blur(25px) saturate(160%);
+    -webkit-backdrop-filter: blur(25px) saturate(160%);
+    margin: 5% auto;
+    padding: 20px 0;
+    border-radius: 20px;
+    width: 85%;
+    max-width: 850px;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+}
+#modal-scroll-wrapper {
+    padding: 10px 30px 30px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+#modal-scroll-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+#modal-scroll-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+}
+#modal-scroll-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+#modal-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+    background-clip: content-box;
+}
+.close-modal {
+    color: #ccc;
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.modal-meta { font-size: 0.9em; color: #aaa; margin-bottom: 5px; }
+#modal-title { 
+    display: block;
+    margin-bottom: 20px; 
+    color: #fff; 
+    font-size: 1.5em; 
+    line-height: 1.3; 
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+#modal-title:hover {
+    color: #667eea;
+}
+#modal-abstract-container h4 { margin: 25px 0 10px 0; font-size: 1.1em; color: #ff6b6b; text-transform: uppercase; }
+#modal-abstract { 
+    line-height: 1.7; 
+    font-size: 1em; 
+    color: #ddd; 
+    text-decoration: none;
+    display: block;
+    transition: color 0.2s ease;
+}
+#modal-abstract:hover {
+    color: #fff;
+}
+.modal-actions { margin-top: 35px; display: flex; justify-content: center; }
+.button.small.alt {
+    display: inline-block;
+    padding: 10px 20px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+</style>
+</head>
+<body>
+<div id="vanta-bg"></div>
+<header>
+    <h1><a href="index.html" style="color: inherit; text-decoration: none;">Alex Bak</a></h1>
+    <div class="subtitle">Toronto • Canada</div>
+    <nav class="main-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="publications.html" class="nav-link active">Publications</a>
+    </nav>
+</header>
+
+<div class="container">
+    <section class="section">
+        <h2>Publications</h2>
+        <div id="pub-controls">
+            <div id="last-updated">Last updated: <span id="last-updated-time">—</span></div>
+            <button id="refresh-btn">Refresh List</button>
+        </div>
+        <div id="pub-list">Loading publications...</div>
+    </section>
+</div>
+
+<!-- Modal -->
+<div id="paper-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <div id="modal-scroll-wrapper">
+            <div id="modal-body">
+                <h3><a id="modal-title" href="#" target="_blank" rel="noopener"></a></h3>
+                <p id="modal-authors" class="modal-meta"></p>
+                <p id="modal-journal" class="modal-meta"></p>
+                <div id="modal-abstract-container">
+                    <h4>Abstract</h4>
+                    <a id="modal-abstract-link" target="_blank" rel="noopener" style="text-decoration: none; color: inherit;">
+                        <div id="modal-abstract"></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://unpkg.com/three@0.134.0/build/three.min.js" defer></script>
+<script src="https://unpkg.com/vanta@0.5.24/dist/vanta.cells.min.js" defer></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        // Vanta Background (Cells)
+        var vantaEffect = null;
+        var vantaColors = {
+            'default': { color1: 0x008c8c, color2: 0xf2e735 }
+        };
+
+        if (typeof VANTA !== 'undefined' && VANTA.CELLS) {
+            try {
+                vantaEffect = VANTA.CELLS({
+                    el: "#vanta-bg",
+                    mouseControls: !isMobile,
+                    touchControls: true,
+                    gyroControls: false,
+                    minHeight: 200.00,
+                    minWidth: 200.00,
+                    scale: 1.00,
+                    color1: vantaColors.default.color1,
+                    color2: vantaColors.default.color2,
+                    size: isMobile ? 1.20 : 1.50,
+                    speed: isMobile ? 0.70 : 1.00
+                });
+            } catch (err) {
+                console.warn("Vanta background failed to initialize:", err);
+                var bgEl = document.getElementById('vanta-bg');
+                if (bgEl) {
+                    var isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    bgEl.style.background = isDark ? '#121212' : '#fafafa';
+                }
+            }
+        }
+
+        // Publications Logic
+        var allWorks = [];
+    var storageAvailable = (function() {
+        try {
+            var x = "__storage_test__";
+            localStorage.setItem(x, x);
+            localStorage.removeItem(x);
+            return true;
+        } catch (e) { return false; }
+    })();
+
+    function reconstructAbstract(work) {
+        if (!work) return null;
+        if (work.abstract) return work.abstract;
+        var invertedIndex = work.abstract_inverted_index;
+        if (!invertedIndex) return null;
+        var words = [];
+        for (var word in invertedIndex) {
+            var positions = invertedIndex[word];
+            for (var j = 0; j < positions.length; j++) {
+                words[positions[j]] = word;
+            }
+        }
+        return words.join(' ');
+    }
+
+    window.openPreview = function(index) {
+        var work = allWorks[index];
+        if (!work) return;
+        var modal = document.getElementById('paper-modal');
+        var titleLink = document.getElementById('modal-title');
+        var abstractLink = document.getElementById('modal-abstract-link');
+        var linkUrl = work.doi || work.id;
+
+        titleLink.innerText = work.title || 'Untitled';
+        titleLink.href = linkUrl;
+        abstractLink.href = linkUrl;
+        
+        var authorsArr = (work.authorships || []).map(function(a) {
+            return (a.author && a.author.display_name) ? a.author.display_name : 'Unknown Author';
+        });
+        document.getElementById('modal-authors').innerText = authorsArr.join(', ');
+        var journalName = (work.primary_location && work.primary_location.source && work.primary_location.source.display_name) ? work.primary_location.source.display_name : '';
+        var year = work.publication_year || '';
+        document.getElementById('modal-journal').innerHTML = '<em>' + journalName + '</em>' + (year ? ' (' + year + ')' : '');
+        var absText = reconstructAbstract(work);
+        document.getElementById('modal-abstract').innerText = absText || 'No abstract available.';
+        modal.style.display = 'block';
+    };
+
+    function closePreview() {
+        document.getElementById('paper-modal').style.display = 'none';
+    }
+
+    document.querySelector('.close-modal').onclick = closePreview;
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('paper-modal')) closePreview();
+    };
+
+    function loadPublications(forceRefresh) {
+        var cacheKey = "pub_cache_html_v16";
+        var cacheDataKey = "pub_cache_data_v16";
+        var cacheTimeKey = "pub_cache_time_v16";
+        var orcid = "0000-0003-4482-4792";
+        var pubListEl = document.getElementById("pub-list");
+
+        var now = Date.now();
+        var cachedData = storageAvailable ? localStorage.getItem(cacheDataKey) : null;
+        var cachedTime = storageAvailable ? parseInt(localStorage.getItem(cacheTimeKey) || "0", 10) : 0;
+        
+        if (!forceRefresh && cachedData && cachedTime && (now - cachedTime < 86400000)) {
+            allWorks = JSON.parse(cachedData);
+            renderWorks(allWorks);
+            document.getElementById("last-updated-time").innerText = new Date(cachedTime).toLocaleString();
+            return;
+        }
+
+        pubListEl.innerHTML = '<div style="padding:20px; text-align:center;">Updating publications...</div>';
+        var filter = 'author.orcid:https://orcid.org/' + orcid;
+        var apiUrl = 'https://api.openalex.org/works?filter=' + encodeURIComponent(filter) + '&sort=publication_year:desc,publication_date:desc&per_page=100';
+
+        fetch(apiUrl)
+            .then(res => res.json())
+            .then(data => {
+                allWorks = data.results || [];
+                if (storageAvailable) {
+                    localStorage.setItem(cacheTimeKey, now.toString());
+                    localStorage.setItem(cacheDataKey, JSON.stringify(allWorks));
+                }
+                renderWorks(allWorks);
+                document.getElementById("last-updated-time").innerText = new Date().toLocaleString();
+            })
+            .catch(err => {
+                pubListEl.innerHTML = '<p>Error loading publications. Please try again later.</p>';
+            });
+    }
+
+    function renderWorks(works) {
+        var html = '';
+        var counter = 1;
+        for (var i = 0; i < works.length; i++) {
+            var work = works[i];
+            var type = (work.type || '').toLowerCase();
+            if (type === 'paratext' || type === 'frontmatter') continue;
+            var pmidId = (work.ids && work.ids.pmid) ? work.ids.pmid : null;
+            if (!pmidId) continue;
+            
+            var authorsArr = (work.authorships || []).map(a => (a.author && a.author.display_name) ? a.author.display_name : 'Unknown Author');
+            var authorsStr = authorsArr.length > 5 ? authorsArr.slice(0, 5).join(', ') + ', et al.' : authorsArr.join(', ');
+            var title = work.title || 'Untitled';
+            var year = work.publication_year || '';
+            var journal = (work.primary_location && work.primary_location.source && work.primary_location.source.display_name) ? work.primary_location.source.display_name : '';
+            
+            html += '<div class="pub-entry-container">' +
+                    '<a onclick="openPreview(' + i + ')" class="pub-entry">' + 
+                    counter + '. ' + authorsStr + '. <strong>' + title + '</strong>. <em>' + journal + '</em>' + (year ? '. ' + year + '.' : '') +
+                    '</a></div>';
+            counter++;
+        }
+        document.getElementById("pub-list").innerHTML = html || '<p>No publications found.</p>';
+    }
+
+    document.getElementById('refresh-btn').onclick = function() { loadPublications(true); };
+    loadPublications();
+});
+</script>
+</body>
+</html>

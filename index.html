@@ -66,6 +66,34 @@ header {
 }
 h1 { font-size: 1.8rem; margin: 0; }
 .subtitle { color: var(--subtitle-color); font-size: 0.9rem; margin-top: 2px; }
+.main-nav {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+.nav-link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--subtitle-color);
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+.nav-link:hover {
+    color: var(--text-color);
+    background: rgba(0, 0, 0, 0.05);
+}
+.nav-link.active {
+    color: var(--text-color);
+    background: rgba(0, 0, 0, 0.05);
+}
+@media (prefers-color-scheme: dark) {
+    .nav-link:hover, .nav-link.active {
+        background: rgba(255, 255, 255, 0.1);
+    }
+}
 .container {
     max-width: 900px;
     margin: 0 auto;
@@ -147,58 +175,6 @@ h1 { font-size: 1.8rem; margin: 0; }
         order: 1;
     }
 }
-#pub-list a.pub-entry {
-    display: block;
-    margin: 10px 0;
-    line-height: 1.4;
-    font-size: 0.95rem;
-    color: var(--text-color);
-    text-decoration: none;
-    padding: 8px 12px;
-    margin: 8px -12px;
-    border-radius: 8px;
-    transition: background-color 0.2s ease;
-}
-#pub-list.collapsed .pub-entry-container:nth-child(n+11) {
-    display: none;
-}
-#pub-list .pub-entry-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 12px;
-    margin: 8px -12px;
-    border-radius: 8px;
-    transition: background-color 0.2s ease;
-}
-#pub-list .pub-entry-container:hover {
-    background-color: rgba(102, 126, 234, 0.08);
-}
-#pub-list .pub-entry-container a.pub-entry {
-    flex-grow: 1;
-    margin: 0;
-    line-height: 1.4;
-    font-size: 0.95rem;
-    color: var(--text-color);
-    text-decoration: none;
-    padding-right: 15px;
-}
-#pub-list .pub-entry-container:hover a.pub-entry strong {
-    color: #667eea;
-    background-color: rgba(102, 126, 234, 0.15);
-}
-#pub-list .pub-entry-container strong {
-    transition: color 0.2s ease, background-color 0.2s ease;
-    border-radius: 3px;
-    padding: 1px 3px;
-    margin: -1px -3px;
-}
-#pub-controls { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
-#refresh-btn {
-    padding: 6px 10px; border-radius: 8px; border: 1px solid #ddd;
-    background: var(--card-bg); cursor: pointer; color: var(--text-color);
-}
-#last-updated { color: var(--subtitle-color); font-size: 0.9rem; }
 a { color: var(--link-color); text-decoration: none; }
 
 
@@ -513,8 +489,12 @@ a { color: var(--link-color); text-decoration: none; }
 <body>
 <div id="vanta-bg"></div>
 <header>
-    <h1 itemprop="name">Alex Bak</h1>
+    <h1 itemprop="name"><a href="index.html" style="color: inherit; text-decoration: none;">Alex Bak</a></h1>
     <div class="subtitle">Toronto • Canada</div>
+    <nav class="main-nav">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="publications.html" class="nav-link">Publications</a>
+    </nav>
 </header>
 <div class="container">
 <aside>
@@ -643,148 +623,6 @@ a { color: var(--link-color); text-decoration: none; }
         </div>
     </div>
 </section>
-
-<section class="section" id="publications">
-    <h2>Publications</h2>
-    <div id="pub-controls">
-        <button id="refresh-btn" title="Force refresh publications">Refresh</button>
-        <div id="last-updated">Last updated: <span id="last-updated-time">—</span></div>
-    </div>
-    <div id="pub-list" class="collapsed">Loading publications...</div>
-    <div id="show-more-container" style="display: none;">
-        <button id="show-more-btn">Show More</button>
-    </div>
-</section>
-
-<!-- Paper Preview Modal -->
-<div id="paper-modal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <div id="modal-scroll-wrapper">
-            <div id="modal-body">
-                <h3 id="modal-title"></h3>
-                <p id="modal-authors" class="modal-meta"></p>
-                <p id="modal-journal" class="modal-meta"></p>
-                <div id="modal-abstract-container">
-                    <h4>Abstract</h4>
-                    <div id="modal-abstract"></div>
-                </div>
-                <div class="modal-actions">
-                    <a id="modal-link" href="#" target="_blank" rel="noopener" class="button small alt">Open in New Tab</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<style>
-/* Modal Styles */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 20000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden; /* Prevent background scroll chaining */
-    background-color: rgba(0, 0, 0, 0.5); /* Slightly lighter overlay */
-}
-.modal-content {
-    background: rgba(25, 25, 25, 0.65); /* More transparent dark base */
-    backdrop-filter: blur(25px) saturate(160%);
-    -webkit-backdrop-filter: blur(25px) saturate(160%);
-    margin: 5% auto;
-    padding: 20px 0; /* Vertical padding for scrollbar buffer */
-    border-radius: 20px;
-    width: 85%;
-    max-width: 850px;
-    position: relative;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    transition: transform 0.3s ease-out;
-    overflow: hidden; /* Prevent direct content spill */
-    display: flex;
-    flex-direction: column;
-}
-#modal-scroll-wrapper {
-    padding: 10px 30px 30px; /* Internal padding for content */
-    overflow-y: auto;
-    flex-grow: 1;
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-    overscroll-behavior: contain; /* Prevent scroll chaining to background */
-    /* Smooth fade at boundaries */
-    -webkit-mask-image: linear-gradient(to bottom, transparent, black 30px, black calc(100% - 30px), transparent);
-    mask-image: linear-gradient(to bottom, transparent, black 30px, black calc(100% - 30px), transparent);
-}
-.close-modal {
-    color: #ccc;
-    position: absolute;
-    right: 20px;
-    top: 15px;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.close-modal:hover { color: #fff; transform: scale(1.1); }
-.modal-meta { font-size: 0.9em; color: #aaa; margin-bottom: 5px !important; }
-#modal-title { margin-bottom: 20px; color: #fff; font-size: 1.5em; line-height: 1.3; font-weight: 700; }
-#modal-abstract-container h4 { margin: 25px 0 10px 0; font-size: 1.1em; color: #ff6b6b; text-transform: uppercase; letter-spacing: 1px; }
-#modal-abstract { line-height: 1.7; font-size: 1em; text-align: justify; color: #ddd; }
-.modal-actions { margin-top: 35px; display: flex; justify-content: center; }
-.modal-actions .button {
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    padding: 0.8em 2.5em !important;
-    height: auto !important;
-    line-height: 1.5 !important;
-    font-size: 0.9em !important;
-    font-family: inherit !important;
-    text-align: center;
-}
-#modal-link { background-color: #d52349; color: #fff; border: none; text-decoration: none !important; display: inline-block; }
-#modal-link:hover { background-color: #f03e66; box-shadow: 0 4px 15px rgba(213, 35, 73, 0.4); }
-
-.pub-entry-container { 
-    margin: 8px -12px;
-    border-radius: 8px;
-    transition: background-color 0.2s ease;
-}
-.pub-entry-container:hover {
-    background-color: rgba(102, 126, 234, 0.12);
-}
-.pub-entry-container a.pub-entry {
-    display: block;
-    width: 100%;
-    padding: 12px 15px;
-    text-decoration: none !important;
-    cursor: pointer;
-}
-.preview-btn {
-    display: none !important;
-}
-@media screen and (max-width: 736px) {
-    .modal-content { 
-        width: calc(100% - 40px); /* 20px buffer on each side */
-        margin: 20px auto 60px;   /* Large 60px bottom margin to clear Safari UI */
-        padding: 30px 0;          /* Increased vertical padding for scrollbar buffer */
-        border-radius: 15px;
-        max-height: calc(100vh - 120px); /* Ends much earlier to clear home indicator */
-        overflow: hidden;         /* Contain the scroll wrapper */
-    }
-    #modal-scroll-wrapper {
-        padding: 5px 20px 20px;   /* Adjusted internal padding */
-    }
-    .modal-actions { flex-direction: column; }
-    #modal-title { font-size: 1.1em; margin-bottom: 12px; }
-    #modal-abstract { font-size: 0.85em; line-height: 1.6; }
-    .modal-meta { font-size: 0.75em; }
-    #modal-abstract-container h4 { font-size: 0.9em; margin-top: 15px; }
-    .close-modal { top: 5px; right: 10px; font-size: 22px; padding: 10px; z-index: 10; } 
-}
-</style>
 
 </main>
 </div>
@@ -1225,276 +1063,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
     renderNews();
-
-    // ============================================
-    // PUBLICATIONS
-    // ============================================
-    var allWorks = []; // Global store for works data
-
-    function updateShowMoreButton() {
-        var pubList = document.getElementById("pub-list");
-        var showMoreContainer = document.getElementById("show-more-container");
-        if (!pubList || !showMoreContainer) return;
-        var entries = pubList.querySelectorAll('.pub-entry-container');
-        if (entries.length > 10) {
-            showMoreContainer.style.display = "block";
-        } else {
-            showMoreContainer.style.display = "none";
-        }
-    }
-
-    function reconstructAbstract(work) {
-        if (!work) return null;
-        if (work.abstract) return work.abstract; // Some works have raw text
-        var invertedIndex = work.abstract_inverted_index;
-        if (!invertedIndex) return null;
-        var words = [];
-        for (var word in invertedIndex) {
-            var positions = invertedIndex[word];
-            for (var j = 0; j < positions.length; j++) {
-                words[positions[j]] = word;
-            }
-        }
-        return words.join(' ');
-    }
-
-    window.openPreview = function(index) {
-        console.log('Opening preview for index:', index);
-        var work = allWorks[index];
-        if (!work) {
-            console.error('Work not found at index:', index);
-            return;
-        }
-
-        var modal = document.getElementById('paper-modal');
-        var title = document.getElementById('modal-title');
-        var authors = document.getElementById('modal-authors');
-        var journal = document.getElementById('modal-journal');
-        var abstract = document.getElementById('modal-abstract');
-        var link = document.getElementById('modal-link');
-        var abstractContainer = document.getElementById('modal-abstract-container');
-
-        if (!modal) {
-            console.error('Modal element not found');
-            return;
-        }
-
-        title.innerText = work.title || 'Untitled';
-        
-        var authorsArr = (work.authorships || []).map(function(a) {
-            return (a.author && a.author.display_name) ? a.author.display_name : 'Unknown Author';
-        });
-        authors.innerText = authorsArr.join(', ');
-        
-        var journalName = (work.primary_location && work.primary_location.source && work.primary_location.source.display_name) ? work.primary_location.source.display_name : '';
-        var year = work.publication_year || '';
-        journal.innerHTML = '<em>' + journalName + '</em>' + (year ? ' (' + year + ')' : '');
-
-        var absText = reconstructAbstract(work);
-        
-        if (absText) {
-            abstract.innerText = absText;
-        } else {
-            var pmid = (work.ids && work.ids.pmid) ? work.ids.pmid.split('/').pop() : null;
-            var doi = work.doi ? work.doi.replace('https://doi.org/', '') : null;
-            
-            var msg = '<div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:10px; border-left:4px solid #ff6b6b; margin-top:10px;">' +
-                      '<p>The abstract for this work is not currently indexed in our primary open database.</p>';
-            
-            if (pmid) {
-                msg += '<p style="margin-top:15px;"><a href="https://pubmed.ncbi.nlm.nih.gov/' + pmid + '/" target="_blank" rel="noopener" style="color:#ff6b6b; font-weight:600; text-decoration:underline;">Read the full abstract on PubMed →</a></p>';
-            } else if (entryLink) {
-                msg += '<p style="margin-top:15px;"><a href="' + entryLink + '" target="_blank" rel="noopener" style="color:#ff6b6b; font-weight:600; text-decoration:underline;">Read the abstract on the publisher\'s site →</a></p>';
-            }
-            
-            msg += '</div>';
-            abstract.innerHTML = msg;
-        }
-        
-        var pmidId = (work.ids && work.ids.pmid) ? work.ids.pmid : null;
-        var entryLink = pmidId || work.doi || work.id;
-        link.href = entryLink;
-
-        // Reset view
-        abstractContainer.style.display = 'block';
-
-        modal.style.display = 'block';
-        
-    // Ensure scroll starts at the top
-    var scrollWrapper = document.getElementById('modal-scroll-wrapper');
-    if (scrollWrapper) {
-        scrollWrapper.scrollTop = 0;
-        
-        // iOS Scroll Chaining Fix: Prevent reaching absolute boundaries
-        scrollWrapper.addEventListener('touchstart', function() {
-            var top = scrollWrapper.scrollTop,
-                totalScroll = scrollWrapper.scrollHeight,
-                currentScroll = top + scrollWrapper.offsetHeight;
-
-            if (top === 0) {
-                scrollWrapper.scrollTop = 1;
-            } else if (currentScroll === totalScroll) {
-                scrollWrapper.scrollTop = top - 1;
-            }
-        });
-    }
-        
-        document.body.style.overflow = 'hidden'; // Prevent scroll
-    };
-
-    window.closePreview = function() {
-        var modal = document.getElementById('paper-modal');
-        if (modal) modal.style.display = 'none';
-        document.body.style.overflow = '';
-    };
-
-    // Modal close events
-    var closeBtn = document.querySelector('.close-modal');
-    if (closeBtn) {
-        closeBtn.onclick = closePreview;
-        closeBtn.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            closePreview();
-        }, {passive: false});
-    }
-
-    window.onclick = function(event) {
-        var modal = document.getElementById('paper-modal');
-        if (event.target == modal) closePreview();
-    };
-    
-    // Add touchstart for closing when clicking outside on mobile
-    window.addEventListener('touchstart', function(event) {
-        var modal = document.getElementById('paper-modal');
-        if (event.target == modal) {
-            event.preventDefault();
-            closePreview();
-        }
-    }, {passive: false});
-
-    function loadPublications(forceRefresh) {
-        if (forceRefresh === undefined) forceRefresh = false;
-        var cacheKey = "pub_cache_html_v16";
-        var cacheDataKey = "pub_cache_data_v16";
-        var cacheTimeKey = "pub_cache_time_v16";
-        var orcid = "0000-0003-4482-4792";
-        var pubListEl = document.getElementById("pub-list");
-        if (!pubListEl) return;
-
-        var now = Date.now();
-        var cachedHtml = storageAvailable ? localStorage.getItem(cacheKey) : null;
-        var cachedData = storageAvailable ? localStorage.getItem(cacheDataKey) : null;
-        var cachedTime = storageAvailable ? parseInt(localStorage.getItem(cacheTimeKey) || "0", 10) : 0;
-        
-        if (!forceRefresh && cachedHtml && cachedData && cachedTime && (now - cachedTime < 86400000)) {
-            try {
-                allWorks = JSON.parse(cachedData);
-                pubListEl.innerHTML = cachedHtml;
-                var timeEl = document.getElementById("last-updated-time");
-                if (timeEl) timeEl.innerText = new Date(cachedTime).toLocaleString();
-                updateShowMoreButton();
-                return;
-            } catch (e) {
-                // Ignore and refetch
-            }
-        }
-
-        pubListEl.innerHTML = '<div style="padding:20px; text-align:center;">Updating publications...</div>';
-
-        var filter = 'author.orcid:https://orcid.org/' + orcid;
-        var apiUrl = 'https://api.openalex.org/works?filter=' + encodeURIComponent(filter) + '&sort=publication_year:desc,publication_date:desc&per_page=100';
-
-        fetch(apiUrl)
-            .then(function(res) { 
-                if (!res.ok) throw new Error('API response not OK: ' + res.status);
-                return res.json(); 
-            })
-            .then(function(data) {
-                var works = data.results || [];
-                allWorks = works; // Store globally
-                var finalUpdateEl = document.getElementById("last-updated-time");
-                var nowStr = new Date().toLocaleString();
-                
-                if (finalUpdateEl) finalUpdateEl.innerText = nowStr;
-                if (storageAvailable) {
-                    localStorage.setItem(cacheTimeKey, now.toString());
-                    localStorage.setItem(cacheDataKey, JSON.stringify(works));
-                }
-
-                if (!works.length) {
-                    pubListEl.innerHTML = '<p>No publications found.</p>';
-                    return;
-                }
-
-                var html = '';
-                var counter = 1;
-                for (var i = 0; i < works.length; i++) {
-                    var work = works[i];
-                    var type = (work.type || '').toLowerCase();
-                    if (type === 'paratext' || type === 'frontmatter') continue;
-                    
-                    var pmidId = (work.ids && work.ids.pmid) ? work.ids.pmid : null;
-                    if (!pmidId) continue;
-                    
-                    var doi = work.doi || null;
-
-                    var authorsArr = (work.authorships || []).map(function(a) {
-                        return (a.author && a.author.display_name) ? a.author.display_name : 'Unknown Author';
-                    });
-                    var authorsStr = authorsArr.length > 3 ? authorsArr.slice(0, 3).join(', ') + ', et al.' : authorsArr.join(', ');
-                    var title = work.title || 'Untitled';
-                    
-                    var year = work.publication_year || '';
-                    var journal = (work.primary_location && work.primary_location.source && work.primary_location.source.display_name) ? work.primary_location.source.display_name : '';
-                    var entryLink = pmidId || doi || work.id;
-                    var content = counter + '. ' + authorsStr + '. <strong>' + title + '</strong>. <em>' + journal + '</em>' + (year ? '. ' + year + '.' : '');
-                    
-                    html += '<div class="pub-entry-container">' +
-                            '<a onclick="openPreview(' + i + ')" class="pub-entry">' + content + '</a>' +
-                            '</div>';
-                    counter++;
-                }
-
-                if (!html) {
-                    pubListEl.innerHTML = '<p>No publications found.</p>';
-                } else {
-                    pubListEl.innerHTML = html;
-                    if (storageAvailable) localStorage.setItem(cacheKey, html);
-                }
-                updateShowMoreButton();
-            })
-            .catch(function(err) {
-                console.error('Error loading publications:', err);
-                pubListEl.innerText = "Error loading publications. Please try refreshing.";
-            });
-    }
-
-    function escapeHtml(str) {
-        if (!str) return '';
-        return String(str).replace(/[&<>\"'`]/g, function(s) {
-            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '`': '&#96;' }[s];
-        });
-    }
-
-    var refreshBtn = document.getElementById('refresh-btn');
-    if (refreshBtn) refreshBtn.addEventListener('click', function() { loadPublications(true); });
-    
-    var showMoreBtn = document.getElementById('show-more-btn');
-    if (showMoreBtn) {
-        showMoreBtn.addEventListener('click', function() {
-            var pubList = document.getElementById('pub-list');
-            if (pubList.classList.contains('collapsed')) {
-                pubList.classList.remove('collapsed');
-                showMoreBtn.textContent = 'Show Less';
-            } else {
-                pubList.classList.add('collapsed');
-                showMoreBtn.textContent = 'Show More';
-                document.getElementById('publications').scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    }
-
-    loadPublications();
 
     var contactLink = document.getElementById('contact-link');
     if (contactLink) {
