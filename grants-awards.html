@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grants &amp; Awards | Alex Bak</title>
+<style>
+:root {
+    --bg-color: #fafafa;
+    --text-color: #222;
+    --card-bg: rgba(255, 255, 255, 0.7);
+    --card-shadow: rgba(0,0,0,0.05);
+    --card-border: rgba(255, 255, 255, 0.4);
+    --subtitle-color: #666;
+    --link-color: #444;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #121212;
+        --text-color: #e0e0e0;
+        --card-bg: rgba(30, 30, 30, 0.7);
+        --card-shadow: rgba(0,0,0,0.4);
+        --card-border: rgba(255, 255, 255, 0.1);
+        --subtitle-color: #aaa;
+        --link-color: #bbb;
+    }
+}
+html {
+    background-color: var(--bg-color);
+}
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+    position: relative;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+#vanta-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.section {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 4px 20px var(--card-shadow);
+    margin-bottom: 20px;
+}
+.section h2 { font-size: 1.5rem; margin-top: 0; margin-bottom: 20px; }
+
+/* Awards List Style */
+.award-list {
+    display: flex;
+    flex-direction: column;
+}
+.award-entry {
+    position: relative;
+    padding: 8px 12px 8px 28px;
+    margin: 2px 0;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    border: 1px solid transparent;
+    line-height: 1.5;
+    color: var(--text-color);
+}
+.award-entry::before {
+    content: "•";
+    position: absolute;
+    left: 12px;
+    color: var(--subtitle-color);
+}
+.award-entry:hover {
+    background-color: rgba(102, 126, 234, 0.08);
+    border-color: var(--card-border);
+}
+.award-entry strong {
+    color: inherit;
+    transition: color 0.2s ease;
+}
+.award-entry:hover strong {
+    color: #667eea;
+}
+.section h3 {
+    font-size: 1.1rem;
+    margin: 28px 0 12px 0;
+    color: var(--subtitle-color);
+    font-weight: 600;
+}
+.section h3:first-of-type { margin-top: 0; }
+</style>
+<link rel="stylesheet" href="assets/css/nav.css">
+</head>
+<body>
+<div id="vanta-bg"></div>
+<header>
+    <h1><a href="index.html" style="color: inherit; text-decoration: none;">Alex Bak</a></h1>
+    <div class="subtitle">Toronto • Canada</div>
+    <nav class="main-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="publications.html" class="nav-link">Publications</a>
+        <a href="presentations.html" class="nav-link">Presentations</a>
+        <a href="grants-awards.html" class="nav-link active">Grants &amp; Awards</a>
+    </nav>
+</header>
+
+<div class="container">
+    <section class="section">
+        <h2>Grants &amp; Awards</h2>
+
+        <h3>Awards</h3>
+        <div class="award-list">
+            <div class="award-entry">
+                <strong>Best Paper Award</strong>. North American Spine Society Annual Meeting • 2023
+            </div>
+            <div class="award-entry">
+                <strong>Best Paper Award</strong>. North American Spine Society Annual Meeting • 2022
+            </div>
+            <div class="award-entry">
+                <strong>Founder's Medal Finalist</strong>. Canadian Orthopaedic Association
+            </div>
+            <div class="award-entry">
+                <strong>Anesthesia Patient Safety Foundation Award</strong>. APSF
+            </div>
+            <div class="award-entry">
+                <strong>Abstract Award</strong>. Canadian Anesthesiologists' Society
+            </div>
+            <div class="award-entry">
+                <strong>Outstanding Resident Award</strong>. University of Toronto • 2024
+            </div>
+            <div class="award-entry">
+                <strong>Early Career Investigator</strong>. National Institutes of Health
+            </div>
+            <div class="award-entry">
+                <strong>Innovation in Medicine Prize</strong>. Medical Tech Symposium
+            </div>
+        </div>
+
+        <h3>Grants &amp; Funding</h3>
+        <div class="award-list">
+            <div class="award-entry">
+                <strong>Canadian Anesthesia Research Foundation</strong>. Research funding
+            </div>
+            <div class="award-entry">
+                <strong>AI Studentship</strong>. Temerty Centre for AI Research and Education in Medicine
+            </div>
+            <div class="award-entry">
+                <strong>Institute of Medical Science</strong>. University of Toronto
+            </div>
+            <div class="award-entry">
+                <strong>University of Toronto Faculty of Medicine</strong>. Research support
+            </div>
+            <div class="award-entry">
+                <strong>Digital Health Innovation Grant</strong>. $50,000 Seed Funding
+            </div>
+            <div class="award-entry">
+                <strong>Biomedical Engineering Fellowship</strong>. Engineering Council
+            </div>
+            <div class="award-entry">
+                <strong>Clinical Research Starter Grant</strong>. Anesthesia Society
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="https://unpkg.com/three@0.134.0/build/three.min.js" defer></script>
+<script src="https://unpkg.com/vanta@0.5.24/dist/vanta.cells.min.js" defer></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (typeof VANTA !== 'undefined' && VANTA.CELLS) {
+            try {
+                VANTA.CELLS({
+                    el: "#vanta-bg",
+                    mouseControls: !isMobile,
+                    touchControls: true,
+                    gyroControls: false,
+                    minHeight: 200, minWidth: 200,
+                    color1: 0x008c8c, color2: 0xf2e735,
+                    size: isMobile ? 1.2 : 1.5,
+                    speed: isMobile ? 0.7 : 1.0
+                });
+            } catch (err) {
+                var bg = document.getElementById('vanta-bg');
+                if (bg) bg.style.background = window.matchMedia('(prefers-color-scheme: dark)').matches ? '#121212' : '#fafafa';
+            }
+        }
+    });
+</script>
+</body>
+</html>

@@ -52,48 +52,6 @@ body {
     height: 100%;
     z-index: -1;
 }
-header {
-    padding: 12px 30px;
-    text-align: center;
-    width: fit-content;
-    margin: 20px auto 0;
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--card-border);
-    border-radius: 12px;
-    box-shadow: 0 4px 15px var(--card-shadow);
-}
-h1 { font-size: 1.8rem; margin: 0; }
-.subtitle { color: var(--subtitle-color); font-size: 0.9rem; margin-top: 2px; }
-.main-nav {
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-.nav-link {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--subtitle-color);
-    text-decoration: none;
-    padding: 5px 10px;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-}
-.nav-link:hover {
-    color: var(--text-color);
-    background: rgba(0, 0, 0, 0.05);
-}
-.nav-link.active {
-    color: var(--text-color);
-    background: rgba(0, 0, 0, 0.05);
-}
-@media (prefers-color-scheme: dark) {
-    .nav-link:hover, .nav-link.active {
-        background: rgba(255, 255, 255, 0.1);
-    }
-}
 .container {
     max-width: 900px;
     margin: 0 auto;
@@ -483,8 +441,8 @@ a { color: var(--link-color); text-decoration: none; }
 .timeline-item.small .timeline-org {
     font-size: 0.75rem;
 }
-
 </style>
+<link rel="stylesheet" href="assets/css/nav.css">
 </head>
 <body>
 <div id="vanta-bg"></div>
@@ -494,12 +452,14 @@ a { color: var(--link-color); text-decoration: none; }
     <nav class="main-nav">
         <a href="index.html" class="nav-link active">Home</a>
         <a href="publications.html" class="nav-link">Publications</a>
+        <a href="presentations.html" class="nav-link">Presentations</a>
+        <a href="grants-awards.html" class="nav-link">Grants &amp; Awards</a>
     </nav>
 </header>
 <div class="container">
 <aside>
     <div class="profile-card">
-        <img src="images/headshot1.jpeg" alt="Alex B Bak headshot" itemprop="image">
+        <img src="images/headshot1-web.jpeg" alt="Alex B Bak headshot" itemprop="image">
         <div class="social">
             <a href="https://scholar.google.com/citations?user=TnT6AcUAAAAJ&hl=en" target="_blank" rel="noopener" title="Google Scholar">
                 <svg class="social-icon-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

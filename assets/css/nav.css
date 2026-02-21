@@ -1,0 +1,49 @@
+/* Shared header and navigation - consistent across all pages */
+header {
+    padding: 12px 30px;
+    text-align: center;
+    width: fit-content;
+    margin: 20px auto 30px;
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px var(--card-shadow);
+}
+header h1 { font-size: 1.8rem; margin: 0; }
+header .subtitle { color: var(--subtitle-color); font-size: 0.9rem; margin-top: 2px; }
+
+.main-nav {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.nav-link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--subtitle-color);
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+.nav-link:hover {
+    color: var(--text-color);
+    background: rgba(0, 0, 0, 0.05);
+}
+.nav-link.active {
+    color: var(--text-color);
+    background: rgba(0, 0, 0, 0.08);
+    font-weight: 700;
+}
+@media (prefers-color-scheme: dark) {
+    .nav-link:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+    .nav-link.active {
+        background: rgba(255, 255, 255, 0.15);
+    }
+}
